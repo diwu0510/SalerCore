@@ -126,7 +126,7 @@ namespace Zodo.Saler.Services
         /// <summary>
         /// 毛利
         /// </summary>
-        [MyDataField(UpdateIgnore = true)]
+        [MyDataField(Ignore = true)]
         public decimal ML { get; set; } = 0;
 
         /// <summary>
