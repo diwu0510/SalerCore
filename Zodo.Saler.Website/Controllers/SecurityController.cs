@@ -19,7 +19,7 @@ using Zodo.Saler.Website.Models;
 
 namespace Zodo.Saler.Website.Controllers
 {
-    [Authorize(Roles = "admin, 证券事业部")]
+    [Authorize(Roles = "admin, 证券事务部")]
     public class SecurityController : BaseController
     {
         private readonly MonthReportService service = new MonthReportService();

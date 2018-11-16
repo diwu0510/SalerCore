@@ -20,7 +20,7 @@
                        data-grid="grid"
                        data-options='{"msg": "确认更新此数据？"}'
                        class="btn btn-blue btn-customer"><i class="fa fa-pencil-square"></i>更新同环比数据</a>
-                    <a id="btn-edit"
+                    <a id="btn-details"
                        href="javascript:;"
                        data-action="/Report/Details"
                        data-type="pop"
@@ -120,8 +120,8 @@
                         }
                     }, width: 90, className: 'bg-5'
                 },
-                { title: '同比效益', field: 'lastYearXY', width: 70, className: 'bg-6' },
-                { title: '环比效益', field: 'lastMonthXY', width: 70, className: 'bg-6' }
+                { title: '去年同月效益', field: 'lastYearXY', width: 100, className: 'bg-6' },
+                { title: '上个月效益', field: 'lastMonthXY', width: 100, className: 'bg-6' }
             ],
             keyColumn: 'id',
             height: function() {
@@ -135,7 +135,7 @@
             ajaxErrorFn: null,
             ajaxBeforeSendFn: null,
             click: function(item) { },
-            dblClick: function(item) { $('#btn-edit').trigger('click'); },
+            dblClick: function(item) { $('#btn-details').trigger('click'); },
             multi: false,
             pager: false,
             auto: true

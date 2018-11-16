@@ -48,6 +48,6 @@
         /// <summary>
         /// 毛利
         /// </summary>
-        public decimal ML { get; set; }
+        //public decimal ML { get; set; }
     }
 }
