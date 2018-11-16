@@ -128,7 +128,7 @@ namespace Zodo.Saler.Website.Controllers
                 var list = service.GetSecurityList(param);
 
                 string folderName = DateTime.Today.ToString("yyyyMM");
-                string fileName = $"证券事务部{DateTime.Today.ToString("yyyyMM")}.xlsx";
+                string fileName = $"证券事务部-{year}{month}.xlsx";
                 string baseFolderName = $"{Directory.GetCurrentDirectory()}//wwwroot//template";
                 if (!Directory.Exists(baseFolderName))
                 {
@@ -256,7 +256,7 @@ namespace Zodo.Saler.Website.Controllers
                     int rowCount = worksheet.Dimension.Rows;
                     int ColCount = worksheet.Dimension.Columns;
 
-                    if (ColCount != 18)
+                    if (ColCount != 7)
                     {
                         return Content("不合法的数据列");
                     }

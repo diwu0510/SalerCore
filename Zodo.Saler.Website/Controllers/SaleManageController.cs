@@ -130,7 +130,7 @@ namespace Zodo.Saler.Website.Controllers
                 var list = service.GetSaleManageList(param);
 
                 string folderName = DateTime.Today.ToString("yyyyMM");
-                string fileName = $"销售管理部{DateTime.Today.ToString("yyyyMM")}.xlsx";
+                string fileName = $"销售管理部-{year}{month}.xlsx";
                 string baseFolderName = $"{Directory.GetCurrentDirectory()}//wwwroot//template";
                 if (!Directory.Exists(baseFolderName))
                 {

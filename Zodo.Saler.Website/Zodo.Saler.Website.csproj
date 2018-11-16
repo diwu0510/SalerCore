@@ -5,6 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\reports\**" />
+    <Compile Remove="wwwroot\report\**" />
+    <Compile Remove="wwwroot\template\**" />
+    <Content Remove="wwwroot\reports\**" />
+    <Content Remove="wwwroot\report\**" />
+    <Content Remove="wwwroot\template\**" />
+    <EmbeddedResource Remove="wwwroot\reports\**" />
+    <EmbeddedResource Remove="wwwroot\report\**" />
+    <EmbeddedResource Remove="wwwroot\template\**" />
+    <None Remove="wwwroot\reports\**" />
+    <None Remove="wwwroot\report\**" />
+    <None Remove="wwwroot\template\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.App" />

@@ -121,12 +121,12 @@ namespace Zodo.Saler.Services
         /// <summary>
         /// 账面毛利
         /// </summary>
-        [MyDataField(Ignore = true)]
         public decimal ZMML { get; set; } = 0;
 
         /// <summary>
         /// 毛利
         /// </summary>
+        [MyDataField(UpdateIgnore = true)]
         public decimal ML { get; set; } = 0;
 
         /// <summary>

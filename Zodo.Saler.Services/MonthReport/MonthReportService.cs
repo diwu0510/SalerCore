@@ -29,7 +29,7 @@ namespace Zodo.Saler.Services
         /// </summary>
         private readonly string[] COLUMNS_SALESERVICE = new string[]
         {
-            "YJ", "ZMML", "ML"
+            "YJ", "ZMML"
         };
 
         /// <summary>
@@ -144,8 +144,8 @@ namespace Zodo.Saler.Services
             }
 
             string sql = @"
-INSERT INTO Base_MonthReport (SalerId,DeptId,Year,HalfYear,Quarter,Month,FJ,HC,BS,ZJC,DSF,YWZDF,ZSF,ZSJYJL,JTJT,CFJT,TXF,QTFY,XZ,YJ,FWF,ZMML,ML,IsDel,CreateAt,CreateBy,Creator,UpdateAt,UpdateBy,Updator) 
-SELECT Id,DeptId,@Year,@HalfYear,@Quarter,@Month,0,0,0,0,0,0,0,0,0,0,0,0,Salary,0,0,0,0,0,GETDATE(),@UserId,@UserName,GETDATE(),@UserId,@UserName
+INSERT INTO Base_MonthReport (SalerId,DeptId,Year,HalfYear,Quarter,Month,FJ,HC,BS,ZJC,DSF,YWZDF,ZSF,ZSJYJL,JTJT,CFJT,TXF,QTFY,XZ,YJ,FWF,ZMML,IsDel,CreateAt,CreateBy,Creator,UpdateAt,UpdateBy,Updator) 
+SELECT Id,DeptId,@Year,@HalfYear,@Quarter,@Month,0,0,0,0,0,0,0,0,0,0,0,0,Salary,0,0,0,0,GETDATE(),@UserId,@UserName,GETDATE(),@UserId,@UserName
 FROM Base_Saler WHERE Id=@Id And IsDel=0";
 
             var row = db.Execute(sql, new { Id = entity.SalerId, Year = entity.Year, HalfYear = halfYear, Quarter = quarter, Month = entity.Month, UserId = user.Id, UserName = user.Name });
@@ -196,8 +196,8 @@ FROM Base_Saler WHERE Id=@Id And IsDel=0";
 
             var depts = DeptUtil.All();
             string sql = @"
-INSERT INTO Base_MonthReport (SalerId,DeptId,Year,HalfYear,Quarter,Month,FJ,HC,BS,ZJC,DSF,YWZDF,ZSF,ZSJYJL,JTJT,CFJT,TXF,QTFY,XZ,YJ,FWF,ZMML,ML,IsDel,CreateAt,CreateBy,Creator,UpdateAt,UpdateBy,Updator) 
-SELECT Id,DeptId,@Year,@HalfYear,@Quarter,@Month,0,0,0,0,0,0,0,0,0,0,0,0,Salary,0,0,0,0,0,GETDATE(),@UserId,@UserName,GETDATE(),@UserId,@UserName
+INSERT INTO Base_MonthReport (SalerId,DeptId,Year,HalfYear,Quarter,Month,FJ,HC,BS,ZJC,DSF,YWZDF,ZSF,ZSJYJL,JTJT,CFJT,TXF,QTFY,XZ,YJ,FWF,ZMML,IsDel,CreateAt,CreateBy,Creator,UpdateAt,UpdateBy,Updator) 
+SELECT Id,DeptId,@Year,@HalfYear,@Quarter,@Month,0,0,0,0,0,0,0,0,0,0,0,0,Salary,0,0,0,0,GETDATE(),@UserId,@UserName,GETDATE(),@UserId,@UserName
 FROM Base_Saler WHERE IsDel=0 ORDER BY DeptId,Name";
             var row = db.Execute(sql, new { Year = entity.Year, Month = entity.Month, HalfYear = halfYear, Quarter = quarter, UserId = user.Id, UserName = user.Name });
             return row > 0 ? ResultUtil.Success<int>(row) : ResultUtil.Fail();

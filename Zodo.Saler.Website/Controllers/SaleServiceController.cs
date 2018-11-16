@@ -128,7 +128,7 @@ namespace Zodo.Saler.Website.Controllers
                 var list = service.GetSaleServiceList(param);
 
                 string folderName = DateTime.Today.ToString("yyyyMM");
-                string fileName = $"销售服务部{DateTime.Today.ToString("yyyyMM")}.xlsx";
+                string fileName = $"销售服务部-{year}{month}.xlsx";
                 string baseFolderName = $"{Directory.GetCurrentDirectory()}//wwwroot//template";
                 if (!Directory.Exists(baseFolderName))
                 {
@@ -149,15 +149,15 @@ namespace Zodo.Saler.Website.Controllers
                     workSheet.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     workSheet.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                    workSheet.Cells[1, 1, 1, 9].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 9].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 9].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 9].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 9].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                    workSheet.Cells[1, 1, 1, 8].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 8].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 8].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 8].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 8].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
 
                     int rowIndex = 1;
                     workSheet.Cells[1, 1, 1, 9].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    workSheet.Cells[1, 1, 1, 9].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+                    workSheet.Cells[1, 1, 1, 8].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
 
                     workSheet.Cells[rowIndex, 1].Value = "编号";
                     workSheet.Cells[rowIndex, 2].Value = "年";
@@ -167,7 +167,6 @@ namespace Zodo.Saler.Website.Controllers
                     workSheet.Cells[rowIndex, 6].Value = "职位";
                     workSheet.Cells[rowIndex, 7].Value = "业绩";
                     workSheet.Cells[rowIndex, 8].Value = "账面毛利";
-                    workSheet.Cells[rowIndex, 9].Value = "毛利";
 
                     workSheet.Row(rowIndex).Height = 28;
 
@@ -183,13 +182,12 @@ namespace Zodo.Saler.Website.Controllers
                         workSheet.Cells[rowIndex, 6].Value = report.Job;
                         workSheet.Cells[rowIndex, 7].Value = report.YJ;
                         workSheet.Cells[rowIndex, 8].Value = report.ZMML;
-                        workSheet.Cells[rowIndex, 9].Value = report.ML;
 
-                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                        workSheet.Cells[rowIndex, 1, rowIndex, 8].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 8].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 8].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 8].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 8].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
 
                         workSheet.Row(rowIndex).Height = 24;
                         rowIndex++;
@@ -260,7 +258,7 @@ namespace Zodo.Saler.Website.Controllers
                     int rowCount = worksheet.Dimension.Rows;
                     int ColCount = worksheet.Dimension.Columns;
 
-                    if (ColCount != 18)
+                    if (ColCount != 8)
                     {
                         return Content("不合法的数据列");
                     }
@@ -284,7 +282,6 @@ namespace Zodo.Saler.Website.Controllers
                             int id = 0;
                             decimal yj = 0;
                             decimal zmml = 0;
-                            decimal ml = 0;
 
                             int y = 0;
                             int m = 0;
@@ -295,13 +292,11 @@ namespace Zodo.Saler.Website.Controllers
                             int.TryParse(sheet.Cells[idx, 1].Value.ToString(), out id);
                             decimal.TryParse(sheet.Cells[idx, 7].Value.ToString(), out yj);
                             decimal.TryParse(sheet.Cells[idx, 8].Value.ToString(), out zmml);
-                            decimal.TryParse(sheet.Cells[idx, 9].Value.ToString(), out ml);
 
 
                             entity.Id = id;
                             entity.YJ = yj;
                             entity.ZMML = zmml;
-                            entity.ML = ml;
                             entity.Year = y;
                             entity.Month = m;
 
