@@ -10,9 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Zodo.Saler.Website.Models;
 using Zodo.Saler.Website.Extensions;
-using Microsoft.AspNetCore.Authorization;
+using Zodo.Saler.Website.Models;
 
 namespace Zodo.Saler.Website.Controllers
 {
@@ -73,7 +72,7 @@ namespace Zodo.Saler.Website.Controllers
                 return Json(ResultUtil.AuthFail("验证码错误"));
             }
 
-            var user = service.Login(model.Name, model.Pw);
+            var user = service.Login(model.Name.Trim(), model.Pw.Trim());
             if (user.Code != 200)
             {
                 return Json(ResultUtil.AuthFail("用户不存在"));

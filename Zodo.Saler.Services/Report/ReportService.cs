@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Zodo.Saler.Services
 {
@@ -18,7 +17,7 @@ namespace Zodo.Saler.Services
         /// <returns></returns>
         public List<SummaryViewModel> DeptMonthSummary(int year, bool isContainsDeletedDept = false)
         {
-            string sql = "SELECT DeptId AS Id,Month AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE Year=@Year GROUP BY DeptId,Month";
+            string sql = "SELECT DeptId AS Id,Month AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE Year=@Year AND IsDel=0 GROUP BY DeptId,Month";
             var list = db.FetchBySql<SummaryViewModel>(sql, new { Year = year });
 
             var depts = DeptUtil.All();
@@ -74,7 +73,7 @@ namespace Zodo.Saler.Services
         /// <returns></returns>
         public List<SummaryViewModel> DeptQuarterSummary(int year, bool isContainsDeletedDept = false)
         {
-            string sql = "SELECT DeptId AS Id,Quarter AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE Year=@Year GROUP BY DeptId,Quarter";
+            string sql = "SELECT DeptId AS Id,Quarter AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE Year=@Year AND IsDel=0 GROUP BY DeptId,Quarter";
             var list = db.FetchBySql<SummaryViewModel>(sql, new { Year = year });
 
             var depts = DeptUtil.All();
@@ -132,7 +131,7 @@ namespace Zodo.Saler.Services
             List<int> years = new List<int>();
             int year = DateTime.Today.Year;
 
-            string sql = "SELECT DeptId AS Id,[Year] AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE [Year] BETWEEN @Year-4 AND @Year GROUP BY DeptId,Year";
+            string sql = "SELECT DeptId AS Id,[Year] AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE ([Year] BETWEEN @Year-4 AND @Year) AND IsDel=0 GROUP BY DeptId,Year";
             var list = db.FetchBySql<SummaryViewModel>(sql, new { Year = year });
 
             var depts = DeptUtil.All();
@@ -188,7 +187,7 @@ namespace Zodo.Saler.Services
         /// <returns></returns>
         public List<SummaryViewModel> SalerMonthSummary(int year, int deptId = 0, bool isContainsDeletedSaler = false)
         {
-            string sql = $"SELECT SalerId AS Id,Month AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE Year=@Year{(deptId > 0 ? " AND DeptId=@DeptId" : "")} GROUP BY SalerId,Month";
+            string sql = $"SELECT SalerId AS Id,Month AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE Year=@Year{(deptId > 0 ? " AND DeptId=@DeptId" : "")} AND IsDel=0 GROUP BY SalerId,Month";
             var list = db.FetchBySql<SummaryViewModel>(sql, new { Year = year, DeptId = deptId });
 
             var salers = SalerUtil.All();
@@ -248,7 +247,7 @@ namespace Zodo.Saler.Services
         /// <returns></returns>
         public List<SummaryViewModel> SalerQuarterSummary(int year, int deptId = 0, bool isContainsDeletedSaler = false)
         {
-            string sql = $"SELECT SalerId AS Id,Quarter AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE Year=@Year{(deptId > 0 ? " AND DeptId = @DeptId" : "")} GROUP BY SalerId,Quarter";
+            string sql = $"SELECT SalerId AS Id,Quarter AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE Year=@Year{(deptId > 0 ? " AND DeptId = @DeptId" : "")} AND IsDel=0 GROUP BY SalerId,Quarter";
             var list = db.FetchBySql<SummaryViewModel>(sql, new { Year = year, DeptId = deptId });
 
             var salers = SalerUtil.All();
@@ -310,7 +309,7 @@ namespace Zodo.Saler.Services
             List<int> years = new List<int>();
             int y = DateTime.Today.Year;
 
-            string sql = $"SELECT SalerId AS Id,[Year] AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE [Year] BETWEEN @Year-4 AND @Year{(deptId > 0 ? " AND DeptId = @DeptId" : "")} GROUP BY SalerId,Year";
+            string sql = $"SELECT SalerId AS Id,[Year] AS DateUnit,SUM(HJ) AS HJ,SUM(ML) AS ML,SUM(ZMML) AS ML,SUM(XY) AS XY FROM Base_MonthReport WHERE [Year] BETWEEN @Year-4 AND @Year{(deptId > 0 ? " AND DeptId = @DeptId" : "")} AND IsDel=0 GROUP BY SalerId,Year";
             var list = db.FetchBySql<SummaryViewModel>(sql, new { Year = y, DeptId = deptId });
 
             var salers = SalerUtil.All();
