@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+namespace {{namespace}}.Core
+{
+    public class {{tablename}} : BaseModel
+    {
+{{each model}}        
+        public {{cSharpType}} {{columnName}} { get; set; }
+{{end}}
+    }
+}
+[PageEnd--models\{{tablename}}.cs--]

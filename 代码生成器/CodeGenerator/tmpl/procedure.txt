@@ -1,0 +1,60 @@
+﻿if exists (select * from dbo.sysobjects where id = object_id(N'[{{tablename}}_Add]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [{{tablename}}_Add]
+GO
+------------------------------------
+--用途：增加一条记录 
+--项目名称：
+--说明：
+--时间：2016/10/14 22:11:01
+------------------------------------
+CREATE PROCEDURE {{tablename}}_Add
+    @{{tablename}}Id int output,
+{{each insert}}
+    @{{columnName}} {{sqlProcType}},
+{{end}}	
+
+AS
+ 
+    INSERT INTO [{{tablename}}](
+        [UpdateBy],
+{{each insert}}
+        [{{columnName}}],
+{{end}}
+    ) VALUES (
+        @CreateBy,
+{{each insert}}
+        @{{columnName}},
+{{end}}
+    );
+
+    SET @{{tablename}}Id = @@IDENTITY;
+
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[{{tablename}}_Update]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [{{tablename}}_Update]
+GO
+------------------------------------
+--用途：修改一条记录 
+--项目名称：
+--说明：
+--时间：2016/10/14 22:11:01
+------------------------------------
+CREATE PROCEDURE {{tablename}}_Update
+        @{{tablename}}Id int,
+{{each update}}
+	@{{columnName}} {{sqlProcType}},
+{{end}}	
+
+AS
+ 
+    UPDATE [{{tablename}}] SET 
+        [UpdateAt] = GETDATE(),
+{{each update}}
+	[{{columnName}}] = @{{columnName}},
+{{end}}
+
+    WHERE {{tablename}}Id=@{{tablename}}Id;
+
+GO
+[PageEnd--proc/{{tablename}}.sql--]

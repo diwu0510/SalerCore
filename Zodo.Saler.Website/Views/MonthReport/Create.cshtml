@@ -1,0 +1,88 @@
+﻿@model Zodo.Saler.Services.MonthReportCreateDto
+
+@{
+    ViewData["Title"] = "创建月记录";
+}
+
+<form asp-action="Create">
+    <h1 class="form-box-title">@ViewData["Title"]</h1>
+    <hr />
+    <div class="form-box-fixed-container">
+        <div class="form-box">
+            <div class="row">
+                <div class="label"><span class="font-red">*</span> 年度</div>
+                <div class="control">
+                    <select asp-for="Year" asp-items="ViewBag.Years"></select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="label"><span class="font-red">*</span> 月份</div>
+                <div class="control">
+                    <select asp-for="Month" asp-items="ViewBag.Months"></select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="label"><span class="font-red">*</span> 部门</div>
+                <div class="control">
+                    <select id="DeptId" asp-items="ViewBag.Depts" isvalid="yes" checkexpession="NotNull">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="label"><span class="font-red">*</span> 业务员</div>
+                <div class="control">
+                    <select asp-for="SalerId" asp-items="ViewBag.Salers" isvalid="yes" checkexpession="NotNull">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-box-fixed-foot row">
+        <div class="col-6">
+            <label>&nbsp;</label>
+        </div>
+        <div class="col-6 content-right">
+            <input type="submit" value="提交" class="btn btn-blue" />
+            <input id="btn-closeSelf" type="button" value="关闭" class="btn btn-red btn-close" />
+        </div>
+    </div>
+</form>
+
+@section scripts {
+    <script src="~/lib/validator/validator.js"></script>
+    <script>
+        $(function () {
+            myUI.initForm({ pageType: "pop" });
+
+            $('#DeptId').on('change', function () {
+                var val = $(this).val();
+                if (!val) {
+                    clearSaler();
+                } else {
+                    $.get('/MonthReport/GetDeptSalers/' + val, {}, function (response) {
+                        if (response) {
+                            setSaler(response);
+                        } else {
+                            clearSaler();
+                        }
+                    })
+                }
+            });
+        });
+
+        function clearSaler() {
+            $('#SalerId').html('<option value="">请选择</option>');
+        }
+
+        function setSaler(data) {
+            var html = '<option value="">请选择</option>';
+            $.each(data, function (idx, d) {
+                html += '<option value="' + d.id + '">' + d.name + '</option>';
+            });
+            $('#SalerId').html(html);
+        }
+    </script>
+}

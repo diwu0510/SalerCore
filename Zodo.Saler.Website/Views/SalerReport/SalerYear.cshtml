@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "DeptMonth";
+}
+@section head {
+    <style>
+        .total td {
+            background-color: #ffff99;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+}
+<div class="container-980">
+    <div class="tool-bar content-right">
+        <form asp-action="SalerYear" method="get" id="form1">
+            <select id="year" name="year" asp-items="ViewBag.Years"></select>
+            <select id="zd" asp-items="ViewBag.Groups"></select>
+            <select id="dept" name="deptId" asp-items="ViewBag.Depts"></select>
+        </form>
+    </div>
+    <hr />
+    <div class="blank-20"></div>
+    <div id="main" style="height: 400px;"></div>
+    <table class="table table-bordered table-striped table-hover" id="data-grid">
+        <thead>
+            <tr>
+                <th width="40">ID</th>
+                <th>部门名称</th>
+                <th width="90">年份</th>
+                <th width="90">成本合计</th>
+                <th width="90">业绩</th>
+                <th width="90">毛利</th>
+                <th width="90">账面毛利</th>
+                <th width="90">效益</th>
+            </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+    <div class="blank-20"></div>
+    <div class="content-center font-red">注意：当汇总结果为负数时，图例表示为0，真实数据请参考数据表格</div>
+    <div class="blank-20"></div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.bootcss.com/echarts/4.2.0-rc.1/echarts.js"></script>
+    <script src="~/lib/lodash/lodash.js"></script>
+    <script>
+        var myChart = echarts.init(document.getElementById('main'));
+        var option;
+        var data = [];
+        $(function () {
+            $.get('/SalerReport/GetSalerYearData', { deptId: $('#dept').val() }, function (response) {
+                data = response;
+                render();
+            });
+
+            $('#year').on('change', function () {
+                render();
+            });
+
+            $('#zd').on('change', function () {
+                render();
+            });
+
+            $('#dept').on('change', function () {
+                $('#form1').submit();
+            });
+
+            $('#data-grid').on('dblclick', 'tr', function () {
+                var salerId = $(this).data('saler');
+                var year = $(this).data('year');
+
+                myUI.popIframe(
+                    '/SalerReport/Items?year=' + year + '&salerId=' + salerId,
+                    year + '年业务员数据列表', 860, 480);
+            });
+        });
+
+        function render() {
+            option = buildPieOption();
+            setTimeout(() => {
+                myChart.setOption(option);
+            }, 500);
+        }
+
+        function buildPieOption() {
+            var by = $('#zd option:selected');
+            var zd = by.val();
+            var zdName = by.text();
+            var year = Number($('#year').val());
+            var yearData = _.filter(data, function (d) { return d.dateUnit == year; });
+
+            var opt = {
+                title: {
+                    text: '业务员' + zdName + '年度汇总',
+                    subtext: year + ' 年度',
+                    x: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    type: 'scroll',
+                    orient: 'vertical',
+                    right: 10,
+                    top: 20,
+                    bottom: 20,
+                    data: _.map(yearData, function (m) { return m.name }),
+                },
+                series: [
+                    {
+                        name: zdName,
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['40%', '50%'],
+                        data: _.map(yearData, function (m) { return { name: m.name, value: (m[zd] < 0 ? 0 : m[zd]) } }),
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            setTable(yearData, zd, zdName);
+            return opt;
+        }
+
+        function setTable(d, z, zn) {
+            $('#thHzzj').text(zn);
+            var total = [0, 0, 0, 0, 0];
+            var html = '';
+            $.each(d, function (idx, item) {
+                html += '<tr data-saler="' + item.id + '" data-year="' + item.dateUnit + '" data-unit="' + item.dateUnit + '">';
+                html += '<td>' + item.id + '</td>';
+                html += '<td title="【' + item.name + '】【' + item.dateUnit + '月】">' + item.name + '</td>';
+                html += '<td title="【' + item.name + '】【' + item.dateUnit + '月】">' + item.dateUnit + '年</td>';
+                html += '<td title="【' + item.name + '】【' + item.dateUnit + '月】">' + item.hj + '</td>';
+                html += '<td title="【' + item.name + '】【' + item.dateUnit + '月】">' + item.yj + '</td>';
+                html += '<td title="【' + item.name + '】【' + item.dateUnit + '月】">' + item.ml + '</td>';
+                html += '<td title="【' + item.name + '】【' + item.dateUnit + '月】">' + item.zmml + '</td>';
+                html += '<td title="【' + item.name + '】【' + item.dateUnit + '月】">' + item.xy + '</td>';
+                html += '</tr>';
+                total[0] += item.hj;
+                total[1] += item.yj;
+                total[2] += item.ml;
+                total[3] += item.zmml;
+                total[4] += item.xy;
+            });
+            html += '<tr class="total"><td colspan="3">总计：</td><td>' + total[0] + '</td><td>' + total[1] + '</td><td>' + total[2] + '</td><td>' + total[3] + '</td><td>' + total[4] + '</td></tr>';
+            $('#tbody').html(html);
+        }
+    </script>
+}

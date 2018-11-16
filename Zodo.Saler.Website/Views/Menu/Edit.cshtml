@@ -1,0 +1,91 @@
+﻿@model HZC.Common.Services.MenuEntity
+
+@{
+    ViewData["Title"] = Model.Id > 0 ? "编辑菜单信息" : "创建菜单信息";
+}
+
+<form asp-action="Edit">
+    <h1 class="form-box-title">@ViewData["Title"]</h1>
+    <hr />
+    <div class="form-box-fixed-container">
+        <div class="form-box row">
+            <input type="hidden" asp-for="Id" />
+            <div class="col-6">
+                <div class="label">上级菜单</div>
+                <div class="control">
+                    <select asp-for="ParentId" asp-items="ViewBag.Parents">
+                        <option value="0">一级菜单</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="label">菜单名称</div>
+                <div class="control">
+                    <input asp-for="Name" class="form-control" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="label">图标</div>
+                <div class="control">
+                    <input asp-for="Icon" class="pop-select-iframe" data-title="选择图标" data-url="/html/iconSelector.html" readonly id="icon" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="label">排序</div>
+                <div class="control">
+                    <input asp-for="Sort" class="form-control" />
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="label">链接</div>
+                <div class="control">
+                    <input asp-for="Url" class="form-control" />
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="label">绑定角色</div>
+                <div class="control">
+                    <input type="hidden" asp-for="Roles" />
+                    @foreach (var role in ViewBag.Roles as List<SelectListItem>)
+                    {
+                        <label>
+                            <input type="checkbox" name="cbrole" value="@role.Value" @(role.Selected ? "checked" : "") />
+                            @Html.Raw(role.Text)
+                        </label>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-box-fixed-foot row">
+        <div class="col-7">
+            <div class="label text-red">&nbsp;</div>
+        </div>
+        <div class="col-5 content-right">
+            <input type="submit" class="btn btn-green" value="提交" />
+            <input type="button" id="btn-closeSelf" class="btn btn-red" value="关闭" />
+        </div>
+    </div>
+</form>
+
+@section scripts {
+    <script src="~/lib/validator/validator.js"></script>
+    <script>
+        myUI.initForm({
+            beforeSubmit: function () {
+                var selectedRoles = [];
+                $('input[name="cbrole"]').each(function (item) {
+                    if ($(this).prop('checked')) {
+                        selectedRoles.push($(this).val());
+                    }
+                });
+                $('#Roles').val(selectedRoles.join(','));
+            }
+        });
+        function onIconSelect(val) {
+            layer.closeAll();
+            $("#icon").val("fa " + val);
+        }
+    </script>
+}

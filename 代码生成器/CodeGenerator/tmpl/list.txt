@@ -1,0 +1,126 @@
+﻿<%@ Page Title="{{tablename}}" Language="C#" MasterPageFile="~/MasterPages/MasterListPage.Master" AutoEventWireup="true" CodeBehind="{{tablename}}List.aspx.cs" Inherits="{{namespace}}.Web.{{tablename}}List" %>
+<%@ Register Assembly="AspNetPager" Namespace="Wuqi.Webdiyer" TagPrefix="webdiyer" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="SearchBoxPlaceHolder" runat="server">
+    <table class="table table-edit">
+        <tr>
+{{each searchbox}}
+            <td class="table-edit-label">{{columnDescribe}}</td><td>{{serverControl}}</td>
+{{end}}
+            <td style="width: 90px;" class="align-mid"><asp:LinkButton ID="F_SearchButton" CssClass="butt butt-blue" runat="server" OnClick="F_SearchButton_Click"><i class="fa fa-search"></i>查找&nbsp;</asp:LinkButton></td>
+        </tr>
+    </table>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="ListBoxPlaceHolder" runat="server">
+    <div class="layout-sub-toolbar row">
+        <div class="col-67">
+            <a class="butt butt-green" href="{{tablename}}Edit.aspx">创建</a>
+        </div>
+        <div class="col-33 align-right">
+            <span class="butt"><i class="fa fa-refresh"></i>刷新列表</span>
+        </div>
+    </div>
+    <asp:GridView ID="F_List" CssClass="table table-bordered table-hover" runat="server" AutoGenerateColumns="False" OnRowCommand="F_List_RowCommand">
+        <Columns>
+            <asp:BoundField DataField="{{tablename}}Id" HeaderText="ID" >
+            <ItemStyle Width="60px" />
+            </asp:BoundField>
+{{each gridview}}
+            <asp:BoundField DataField="{{columnName}}" HeaderText="{{columnDescribe}}" />
+{{end}}
+            <asp:TemplateField ShowHeader="False">
+                <ItemTemplate>
+                    <a class="butt butt-mini butt-blue" href="javascript:;" onclick='Popups.showPopups("编辑", "{{tablename}}Edit.aspx?id=<%# Eval("{{tablename}}Id") %>", 540, 260)'>编辑</a>
+                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="false" CommandArgument='<%#Eval("{{tablename}}Id") %>' CommandName="del" CssClass="butt butt-mini butt-red" Text="删除" OnClientClick="return confirm('确认删除？')"></asp:LinkButton>
+                </ItemTemplate>
+                <ItemStyle CssClass="align-mid" Width="90px" />
+            </asp:TemplateField>
+        </Columns>
+        <EmptyDataTemplate>
+            当前请求的数据不存在
+        </EmptyDataTemplate>
+        <EmptyDataRowStyle CssClass="empty" />
+    </asp:GridView>
+    <webdiyer:AspNetPager ID="Pager" runat="server" ShowPageIndexBox="Never"
+        PageIndexBoxType="DropDownList" TextBeforePageIndexBox="转到"
+        PageSize="20" OnPageChanged="Bind" EnableTheming="true" FirstPageText="首页"
+        LastPageText="尾页" NextPageText="下一页" PrevPageText="上一页" CssClass="pager" 
+            PagingButtonSpacing="" CurrentPageButtonClass="current"  
+        CurrentPageButtonStyle="" AlwaysShow="True" 
+        CustomInfoHTML="共计：%RecordCount%条" CustomInfoSectionWidth="120px" 
+        CustomInfoTextAlign="Left" ShowCustomInfoSection="Left" CustomInfoClass="pagerInfo" LayoutType="Table" SubmitButtonText="Go" TextAfterPageIndexBox="页" >
+    </webdiyer:AspNetPager>
+</asp:Content>
+<asp:Content ID="Content4" ContentPlaceHolderID="ScriptsPlaceHolder" runat="server">
+    <script>
+        $(function () {
+            Popups.init();
+        })
+    </script>
+</asp:Content>
+[PageEnd--web\{{tablename}}List.aspx--]
+using System;
+using {{namespace}}.Core;
+using {{namespace}}.Services;
+
+namespace {{namespace}}.Web
+{
+    public partial class {{tablename}}List : BasePage
+    {
+        private DbContext context = new DbContext();
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                BindData();
+            }
+        }
+
+        protected void BindData() 
+        {
+            string where = "IsDel=0";
+
+            var list = context.{{tablename}}.QueryMany(where, Pager.CurrentPageIndex, Pager.PageSize);
+            Pager.RecordCount = list.Total;
+            F_List.DataSource = list.Items;
+            F_List.DataBind();
+        }
+
+        protected void Bind(object sender, EventArgs e)
+        {
+            BindData();
+        }
+
+        protected void F_List_RowCommand(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
+        {
+            int id = Int32.Parse(e.CommandArgument.ToString());
+
+            if (e.CommandName == "del")
+            {
+                context.{{tablename}}.Remove(id);
+            }
+
+            BindData();
+        }
+
+        protected void F_SearchButton_Click(object sender, EventArgs e)
+        {
+            Pager.CurrentPageIndex = 1;
+            BindData();
+        }
+    }
+}
+[PageEnd--web\{{tablename}}List.aspx.cs--]
+namespace {{namespace}}.Web {
+    public partial class {{tablename}}List {
+        protected global::System.Web.UI.WebControls.LinkButton F_SearchButton;
+        protected global::System.Web.UI.WebControls.GridView F_List;
+        protected global::Wuqi.Webdiyer.AspNetPager Pager;
+{{each designer}}
+        {{serverControlName}}
+{{end}}
+    }
+}
+[PageEnd--web\{{tablename}}List.aspx.designer.cs--]

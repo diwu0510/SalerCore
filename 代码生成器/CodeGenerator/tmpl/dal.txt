@@ -1,0 +1,87 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using {{namespace}}.Core;
+
+namespace {{namespace}}.Services
+{
+    public class {{tablename}}Factory : BaseFactory<{{tablename}}>
+    {
+        #region 构造函数
+        public {{tablename}}Factory() : base() { }
+
+        public {{tablename}}Factory(string connSettingKeyName) : base(connSettingKeyName) { }
+
+        #endregion
+
+        #region 验证数据
+        public List<ValidateError> Validate({{tablename}} model)
+        {
+            List<ValidateError> errors = new List<ValidateError>();
+            return errors;
+        }
+        #endregion
+
+        #region 增改数据
+        public override int Create({{tablename}} model, int operatorId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings[_connectionString]))
+                {
+                    SqlParameter[] param = {
+                             new SqlParameter("@{{tablename}}Id",  SqlDbType.Int),
+{{each insert}}
+                             new SqlParameter("@{{columnName}}", {{sqlParamType}}),
+{{end}}
+                    };
+                    param[0].Direction = ParameterDirection.Output;
+{{each insert}}
+                    param[{{idx}}].Value = model.{{columnName}};
+{{end}}
+
+                    int obj = SqlHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, "{{tablename}}_Add", param);
+                    return obj == 0 ? 0 : Convert.ToInt32(param[0].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                DbExceptionHelper.DoException("{{tablename}}Factory.Create", ex);
+                return 0;
+            }
+
+        }
+
+        public override int Update({{tablename}} model, int operatorId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings[_connectionString]))
+                {
+                    SqlParameter[] param = {
+                             new SqlParameter("@{{tablename}}Id", SqlDbType.Int),
+{{each update}}
+                             new SqlParameter("@{{columnName}}", {{sqlParamType}}),
+{{end}}
+                    };
+                    param[0].Value = model.{{tablename}}Id;
+{{each update}}
+                    param[{{idx}}].Value = model.{{columnName}};
+{{end}}
+
+                    return SqlHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, "{{tablename}}_Update", param);
+                }
+            }
+            catch (Exception ex)
+            {
+                DbExceptionHelper.DoException("{{tablename}}Factory.Update", ex);
+                return 0;
+
+            }
+        }
+        #endregion
+    }
+}
+[PageEnd--factory\{{tablename}}Factory.cs--]

@@ -1,0 +1,129 @@
+﻿@model Zodo.Saler.Services.MonthReportDto
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container-fluid container-full">
+    @if (Model == null)
+    {
+        <h3 class="empty content-center font-light-gray">
+            请求的数据不存在
+        </h3>
+    }
+    else
+    {
+        <h3 class="form-box-title">@($"{Model.Year}年{Model.Month}月{Model.SalerName}数据详情")</h3>
+        <hr />
+        <div class="form-box form-box-mini">
+            <div class="row">
+                <div class="col-4">
+                    <div class="label">飞机</div>
+                    <div class="control"><input type="text" readonly value="@Model.FJ" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">火车</div>
+                    <div class="control"><input type="text" readonly value="@Model.HC" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">巴士</div>
+                    <div class="control"><input type="text" readonly value="@Model.BS" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">自驾车</div>
+                    <div class="control"><input type="text" readonly value="@Model.ZJC" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">的士费</div>
+                    <div class="control"><input type="text" readonly value="@Model.DSF" /></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="label">业务招待费</div>
+                    <div class="control"><input type="text" readonly value="@Model.YWZDF" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">住宿费</div>
+                    <div class="control"><input type="text" readonly value="@Model.ZSF" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">住宿节约奖励</div>
+                    <div class="control"><input type="text" readonly value="@Model.ZSJYJL" /></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="label">交通津贴</div>
+                    <div class="control"><input type="text" readonly value="@Model.JTJT" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">餐费津贴</div>
+                    <div class="control"><input type="text" readonly value="@Model.CFJT" /></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="label">通讯费</div>
+                    <div class="control"><input type="text" readonly value="@Model.TXF" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">其他费用</div>
+                    <div class="control"><input type="text" readonly value="@Model.QTFY" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">薪资</div>
+                    <div class="control"><input type="text" readonly value="@Model.XZ" /></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="label">费用合计</div>
+                    <div class="control"><input type="text" readonly value="@Model.HJ" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">销售费用占比</div>
+                    <div class="control"><input type="text" readonly value="@Model.XSFYZYJ.ToString("P")" /></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="label">业绩</div>
+                    <div class="control"><input type="text" readonly value="@Model.YJ" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">服务费</div>
+                    <div class="control"><input type="text" readonly value="@Model.FWF" /></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="label">账面毛利</div>
+                    <div class="control"><input type="text" readonly value="@Model.ZMML" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">毛利</div>
+                    <div class="control"><input type="text" readonly value="@Model.ML" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">毛利率</div>
+                    <div class="control"><input type="text" readonly value="@Model.MLL.ToString("P")" /></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="label">效益</div>
+                    <div class="control"><input type="text" readonly value="@Model.XY" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">上月效益</div>
+                    <div class="control"><input type="text" readonly value="@Model.LastMonthXY" /></div>
+                </div>
+                <div class="col-4">
+                    <div class="label">去年同期效益</div>
+                    <div class="control"><input type="text" readonly value="@Model.LastYearXY" /></div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewData["Title"] = "导入" + ViewBag.Year + "年" + ViewBag.Month + "日记录";
+}
+<div class="blank-20"></div>
+<div class="container container-page container-shadow">
+    <div id="container-header">
+        <h3 class="content-center">@ViewData["Title"]</h3>
+        <hr />
+        <div class="tool-bar">
+        </div>
+    </div>
+    <div style="padding: 15px; text-align: center;">
+        <form enctype="multipart/form-data" method="post" asp-action="Import">
+            <input type="hidden" name="year" value="@ViewBag.Year" />
+            <input type="hidden" name="month" value="@ViewBag.Month" />
+            <input type="file" name="excelFile" class="btn btn-default" />
+            <input type="submit" value="上传" class="btn btn-green" />
+
+            <a href="@ViewBag.ReturnUrl" class="btn btn-blue">返回列表</a>
+        </form>
+        <div class="blank-20"></div>
+        <hr />
+        <div class="content-left">
+            <b class="font-red">注意：</b>
+            <ol class="attension">
+                <li>上传文件将覆盖原始记录，请谨慎操作</li>
+                <li>模板第一行默认为标题，数据将从第二行开始读取</li>
+                <li>模板1-6列内容不要做任何操作，不然可能导致该记录更新失败</li>
+                <li>其他列如果输入内容不是合法的货币，该字段将自动转换为0，并不会返回任何提示，所以上传成功后需检查更新的数据是否有效</li>
+            </ol>
+        </div>
+    </div>
+</div>

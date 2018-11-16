@@ -1,0 +1,412 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+namespace {{namespace}}.Core
+{
+    public class {{tablename}} : BaseModel
+    {
+{{each model}}        
+        public {{cSharpType}} {{columnName}} { get; set; }
+{{end}}
+    }
+}
+[PageEnd--models\{{tablename}}.cs--]
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using {{namespace}}.Core;
+
+namespace {{namespace}}.Services
+{
+    public class {{tablename}}Factory : BaseFactory<{{tablename}}>
+    {
+        #region 构造函数
+        public {{tablename}}Factory() : base() { }
+
+        public {{tablename}}Factory(string connSettingKeyName) : base(connSettingKeyName) { }
+
+        #endregion
+
+        #region 验证数据
+        public List<ValidateError> Validate({{tablename}} model)
+        {
+            List<ValidateError> errors = new List<ValidateError>();
+            return errors;
+        }
+        #endregion
+
+        #region 增改数据
+        public override int Create({{tablename}} model, int operatorId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings[_connectionString]))
+                {
+                    SqlParameter[] param = {
+                             new SqlParameter("@{{tablename}}Id",  SqlDbType.Int),
+{{each insert}}
+                             new SqlParameter("@{{columnName}}", {{sqlParamType}}),
+{{end}}
+                    };
+                    param[0].Direction = ParameterDirection.Output;
+{{each insert}}
+                    param[{{idx}}].Value = model.{{columnName}};
+{{end}}
+                    int obj = SqlHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, "{{tablename}}_Add", param);
+                    return obj == 0 ? 0 : Convert.ToInt32(param[0].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                DbExceptionHelper.DoException("{{tablename}}Factory.Create", ex);
+                return 0;
+            }
+        }
+
+        public override int Update({{tablename}} model, int operatorId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings[_connectionString]))
+                {
+                    SqlParameter[] param = {
+                             new SqlParameter("@{{tablename}}Id", SqlDbType.Int),
+{{each update}}
+                             new SqlParameter("@{{columnName}}", {{sqlParamType}}),
+{{end}}
+                    };
+                    param[0].Value = model.{{tablename}}Id;
+{{each update}}
+                    param[{{idx}}].Value = model.{{columnName}};
+{{end}}
+                    return SqlHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, "{{tablename}}_Update", param);
+                }
+            }
+            catch (Exception ex)
+            {
+                DbExceptionHelper.DoException("{{tablename}}Factory.Update", ex);
+                return 0;
+
+            }
+        }
+        #endregion
+    }
+}
+[PageEnd--factory\{{tablename}}Factory.cs--]
+<%@ Page Title="{{tablename}}" Language="C#" MasterPageFile="~/MasterPages/MasterListPage.Master" AutoEventWireup="true" CodeBehind="{{tablename}}List.aspx.cs" Inherits="{{namespace}}.Web.{{tablename}}List" %>
+<%@ Register Assembly="AspNetPager" Namespace="Wuqi.Webdiyer" TagPrefix="webdiyer" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="SearchBoxPlaceHolder" runat="server">
+    <table class="table table-edit">
+        <tr>
+{{each searchbox}}
+            <td class="table-edit-label">{{columnDescribe}}</td><td>{{serverControl}}</td>
+{{end}}
+            <td style="width: 90px;" class="align-mid"><asp:LinkButton ID="F_SearchButton" CssClass="butt butt-blue" runat="server" OnClick="F_SearchButton_Click"><i class="fa fa-search"></i>查找&nbsp;</asp:LinkButton></td>
+        </tr>
+    </table>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="ListBoxPlaceHolder" runat="server">
+    <div class="layout-sub-toolbar row">
+        <div class="col-67">
+            <a class="butt butt-green" href="javascript:;" onclick="Popups.showPopups('创建', '{{tablename}}Edit.aspx', 540, 260)">创建</a>
+        </div>
+        <div class="col-33 align-right">
+            <span class="butt"><i class="fa fa-refresh"></i>刷新列表</span>
+        </div>
+    </div>
+    <asp:GridView ID="F_List" CssClass="table table-bordered table-hover" runat="server" AutoGenerateColumns="False" OnRowCommand="F_List_RowCommand">
+        <Columns>
+            <asp:BoundField DataField="{{tablename}}Id" HeaderText="ID" >
+            <ItemStyle Width="60px" />
+            </asp:BoundField>
+{{each gridview}}
+            <asp:BoundField DataField="{{columnName}}" HeaderText="{{columnDescribe}}" />
+{{end}}
+            <asp:TemplateField ShowHeader="False">
+                <ItemTemplate>
+                    <a class="butt butt-mini butt-blue" href='javascript:;'  onclick='Popups.showPopups("编辑", "{{tablename}}Edit.aspx?id=<%# Eval("{{tablename}}Id") %>", 540, 260)'>编辑</a>
+                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="false" CommandArgument='<%#Eval("{{tablename}}Id") %>' CommandName="del" CssClass="butt butt-mini butt-red" Text="删除" OnClientClick="return confirm('确认删除？')"></asp:LinkButton>
+                </ItemTemplate>
+                <ItemStyle CssClass="align-mid" Width="90px" />
+            </asp:TemplateField>
+        </Columns>
+        <EmptyDataTemplate>
+            当前请求的数据不存在
+        </EmptyDataTemplate>
+        <EmptyDataRowStyle CssClass="empty" />
+    </asp:GridView>
+    <webdiyer:AspNetPager ID="Pager" runat="server" ShowPageIndexBox="Never"
+        PageIndexBoxType="DropDownList" TextBeforePageIndexBox="转到"
+        PageSize="20" OnPageChanged="Bind" EnableTheming="true" FirstPageText="首页"
+        LastPageText="尾页" NextPageText="下一页" PrevPageText="上一页" CssClass="pager" 
+            PagingButtonSpacing="" CurrentPageButtonClass="current"  
+        CurrentPageButtonStyle="" AlwaysShow="True" 
+        CustomInfoHTML="共计：%RecordCount%条" CustomInfoSectionWidth="120px" 
+        CustomInfoTextAlign="Left" ShowCustomInfoSection="Left" CustomInfoClass="pagerInfo" LayoutType="Table" SubmitButtonText="Go" TextAfterPageIndexBox="页" >
+    </webdiyer:AspNetPager>
+</asp:Content>
+<asp:Content ID="Content4" ContentPlaceHolderID="ScriptsPlaceHolder" runat="server">
+    <script>
+        $(function () {
+            Popups.init();
+        });
+    </script>
+</asp:Content>
+[PageEnd--web\{{tablename}}List.aspx--]
+using System;
+using {{namespace}}.Core;
+using {{namespace}}.Services;
+
+namespace {{namespace}}.Web
+{
+    public partial class {{tablename}}List : BasePage
+    {
+        private {{tablename}}Factory factory = new {{tablename}}Factory();
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                BindData();
+            }
+        }
+
+        protected void BindData() 
+        {
+            string where = "IsDel=0";
+
+            var list = factory.QueryMany(where, Pager.CurrentPageIndex, Pager.PageSize);
+            Pager.RecordCount = list.Total;
+            F_List.DataSource = list.Items;
+            F_List.DataBind();
+        }
+
+        protected void Bind(object sender, EventArgs e)
+        {
+            BindData();
+        }
+
+        protected void F_List_RowCommand(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
+        {
+            int id = Int32.Parse(e.CommandArgument.ToString());
+
+            if (e.CommandName == "del")
+            {
+                factory.Remove(id);
+            }
+
+            BindData();
+        }
+
+        protected void F_SearchButton_Click(object sender, EventArgs e)
+        {
+            Pager.CurrentPageIndex = 1;
+            BindData();
+        }
+    }
+}
+[PageEnd--web\{{tablename}}List.aspx.cs--]
+namespace {{namespace}}.Web {
+    public partial class {{tablename}}List {
+        protected global::System.Web.UI.WebControls.LinkButton F_SearchButton;
+        protected global::System.Web.UI.WebControls.GridView F_List;
+        protected global::Wuqi.Webdiyer.AspNetPager Pager;
+{{each designer}}
+        {{serverControlName}}
+{{end}}
+    }
+}
+[PageEnd--web\{{tablename}}List.aspx.designer.cs--]
+<%@ Page Title="{{tablename}}" Language="C#" MasterPageFile="~/MasterPages/MasterPopPage.Master" AutoEventWireup="true" CodeBehind="{{tablename}}Edit.aspx.cs" Inherits="{{namespace}}.Web.{{tablename}}Edit" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="SearchBoxPlaceHolder" runat="server">
+    <asp:HiddenField ID="F_{{tablename}}Id" runat="server" Value="0" />
+    <table class="table table-edit bg-white">
+        <tr>
+{{each edit}}
+            <td class="table-edit-label">{{columnDescribe}}</td><td>{{serverControl}}</td>
+{{end}}
+        </tr>
+    </table>
+    <div class="layout-pop-foot">
+        <asp:Literal ID="F_Errors" runat="server"></asp:Literal>
+        <asp:LinkButton ID="F_Submit" CssClass="butt butt-blue" runat="server" OnClick="F_Submit_Click">提交</asp:LinkButton>
+        <a href="AreaList.aspx" class="butt">返回</a>
+    </div>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="ScriptsPlaceHolder" runat="server">
+</asp:Content>
+[PageEnd--web\{{tablename}}Edit.aspx--]
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using {{namespace}}.Core;
+using {{namespace}}.Services;
+
+namespace {{namespace}}.Web
+{
+    public partial class {{tablename}}Edit : BasePage
+    {
+        {{tablename}}Factory factory = new {{tablename}}Factory();
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                int id = PageHelper.GetIntParamFromPage("id", 0);
+                if (id > 0)
+                {
+                    // 编辑
+                    var model = factory.Load(id);
+                    
+                    if (model == null)
+                    {
+                        // 如果不存在，跳转到空数据页
+                        PageHelper.EmptyRequest(this);
+                    }
+                    else
+                    {
+                        F_{{tablename}}Id.Value = model.{{tablename}}Id.ToString();
+                        MapModelToControls(model);
+                    }
+                }
+                else if (id < 0)
+                {
+                    // 说明参数错误
+                    PageHelper.BadRequest(this);
+                }
+            }
+        }
+
+        protected void MapModelToControls({{tablename}} model)
+        {
+{{each edit}}
+            {{modelToControl}};
+{{end}}
+        }
+
+        protected void MapControlsToModel({{tablename}} model)
+        {
+            model.{{tablename}}Id = Int32.Parse(F_{{tablename}}Id.Value);
+{{each edit}}
+            {{controlToModel}};
+{{end}}
+        }
+
+        protected void F_Submit_Click(object sender, EventArgs e)
+        {
+            {{tablename}} model = new {{tablename}}();
+            MapControlsToModel(model);
+
+            List<ValidateError> errors = new List<ValidateError>();
+            errors = factory.Validate(model);
+
+            if (errors.Count > 0)
+            {
+                F_Errors.Text = ValidateErrorHelper.AlertErrors(errors);
+                return;
+            }
+
+            int result = 0;
+
+            if (model.{{tablename}}Id == 0)
+            {
+                result= factory.Create(model, Operator.UserId);
+            }
+            else
+            {
+                result= factory.Update(model, Operator.UserId);
+            }
+
+            if (result > 0)
+            {
+                Response.Redirect("{{tablename}}List.aspx");
+            }
+            else
+            {
+                errors.Add(new ValidateError(299, "操作失败"));
+                F_Errors.Text = ValidateErrorHelper.AlertErrors(errors);
+            }
+        }
+    }
+}
+[PageEnd--web\{{tablename}}Edit.aspx.cs--]
+namespace {{namespace}}.Web {
+    public partial class {{tablename}}Edit {
+        protected global::System.Web.UI.WebControls.LinkButton F_Submit;
+        protected global::System.Web.UI.WebControls.HiddenField F_{{tablename}}Id;
+        protected global::System.Web.UI.WebControls.Literal F_Errors;
+{{each edit}}
+        {{serverControlName}}
+{{end}}
+    }
+}
+[PageEnd--web\{{tablename}}Edit.aspx.designer.cs--]
+if exists (select * from dbo.sysobjects where id = object_id(N'[{{tablename}}_Add]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [{{tablename}}_Add]
+GO
+------------------------------------
+--用途：增加一条记录 
+--项目名称：
+--说明：
+--时间：2016/10/14 22:11:01
+------------------------------------
+CREATE PROCEDURE {{tablename}}_Add
+    @{{tablename}}Id int output,
+{{each insert}}
+    @{{columnName}} {{sqlProcType}},
+{{end}}	
+
+AS
+ 
+    INSERT INTO [{{tablename}}](
+        [UpdateBy],
+{{each insert}}
+        [{{columnName}}],
+{{end}}
+    ) VALUES (
+        @CreateBy,
+{{each insert}}
+        @{{columnName}},
+{{end}}
+    );
+
+    SET @{{tablename}}Id = @@IDENTITY;
+
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[{{tablename}}_Update]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [{{tablename}}_Update]
+GO
+------------------------------------
+--用途：修改一条记录 
+--项目名称：
+--说明：
+--时间：2016/10/14 22:11:01
+------------------------------------
+CREATE PROCEDURE {{tablename}}_Update
+        @{{tablename}}Id int,
+{{each update}}
+	@{{columnName}} {{sqlProcType}},
+{{end}}	
+
+AS
+ 
+    UPDATE [{{tablename}}] SET 
+        [UpdateAt] = GETDATE(),
+{{each update}}
+	[{{columnName}}] = @{{columnName}},
+{{end}}
+
+    WHERE {{tablename}}Id=@{{tablename}}Id;
+
+GO
+[PageEnd--proc/{{tablename}}.sql--]

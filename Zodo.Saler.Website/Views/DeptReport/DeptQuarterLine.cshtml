@@ -1,0 +1,174 @@
+﻿@{
+    ViewData["Title"] = "DeptMonth";
+}
+@section head {
+    <style>
+        .total {
+            background-color: #ffff99;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        td:not(.total):hover {
+            background-color: #689243;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
+}
+<div class="container-980">
+    <div class="tool-bar content-right">
+        <form asp-action="DeptQuarterLine" method="get" id="form1">
+            <select id="year" name="year" asp-items="ViewBag.Years"></select>
+            <select id="zd" asp-items="ViewBag.Groups"></select>
+        </form>
+    </div>
+    <hr />
+    <div class="blank-20"></div>
+    <div id="main" style="height: 400px;"></div>
+    <div class="blank-20"></div>
+    <div>
+        <table class="table table-bordered table-striped table-hover" id="data-grid">
+            <thead>
+                <tr>
+                    <th width="90">部门名称</th>
+                    <th>一季度</th>
+                    <th>二季度</th>
+                    <th>三季度</th>
+                    <th>四季度</th>
+                    <th width="110">总计</th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.bootcss.com/echarts/4.2.0-rc.1/echarts.js"></script>
+    <script src="~/lib/lodash/lodash.js"></script>
+    <script>
+        var myChart = echarts.init(document.getElementById('main'));
+        var option;
+        var data = [];
+        $(function () {
+            $.get('/DeptReport/GetDeptQuarterData', { year: 2018 }, function (response) {
+                data = _.groupBy(response, 'name');
+                render();
+            });
+
+            $('#zd').on('change', function () {
+                render();
+            });
+
+            $('#year').on('change', function () {
+                $('#form1').submit();
+            });
+
+            $('#data-grid').on('dblclick', 'td', function () {
+                var deptId = $(this).data('dept');
+                var year = $(this).data('year');
+                var dateUnit = $(this).data('unit');
+                var name = $(this).data('name');
+
+                myUI.popIframe('/DeptReport/Details?type=quarter&year=' + year + '&deptId=' + deptId + '&dateUnit=' + dateUnit, name + dateUnit + '季度业务员数据列表', 720, 460);
+            });
+        });
+
+        function render() {
+            option = buildPieOption();
+            setTimeout(() => {
+                myChart.setOption(option);
+            }, 500);
+        }
+
+        function buildPieOption() {
+            var by = $('#zd option:selected');
+            var zd = by.val();
+            var zdName = by.text();
+
+            var opt = {
+                title: {
+                    text: '部门' + zdName + '季度趋势'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+                    data: getName(data)
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['一季度', '二季度', '三季度', '四季度']
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: getData(data, zd)
+            };
+            setTable(data, zd, zdName);
+            return opt;
+        }
+
+        function setTable(d, z, zn) {
+            var total = 0;
+            var html = '';
+            for (var p in data) {
+                html += '<tr>';
+                html += '<td class="total"><b>' + p + '</b></td>';
+                var total = 0;
+                $.each(data[p], function (idx, item) {
+                    html += '<td title="【' + p + '】' + item.dateUnit + '季度" data-year="' + $('#year').val() + '" data-dept="' + item.id + '" data-unit="' + item.dateUnit + '" data-name="' + item.name + '">' + item[z] + '</td>';
+                    total += item[z];
+                });
+                html += '<td class="total" title="【' + p + '】">' + total + '</td>';
+                html += '</tr>';
+            }
+            $('#tbody').html(html);
+        }
+
+        function getData(obj, zd) {
+            var result = [];
+            for (p in obj) {
+                result.push({
+                    name: p,
+                    type: 'line',
+                    stack: '总量',
+                    areaStyle: {},
+                    data: _.map(obj[p], function (o) { return o[zd]; })
+                });
+            }
+            return result;
+        }
+
+        function getName(obj) {
+            var result = [];
+            for (p in obj) {
+                result.push(p);
+            }
+            return result;
+        }
+    </script>
+}

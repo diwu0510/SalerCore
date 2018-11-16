@@ -1,0 +1,39 @@
+﻿@model List<Zodo.Saler.Website.Models.ImportResultViewModel>
+@{
+    ViewData["Title"] = "数据导入结果";
+}
+
+<div class="blank-20"></div>
+<div class="container container-page container-shadow">
+    <div id="container-header">
+        <h3 class="content-center">@ViewData["Title"]</h3>
+        <hr />
+        <div class="tool-bar">
+            <a href="@ViewBag.ImportUrl" class="btn btn-blue">重新导入</a>
+            <a href="@ViewBag.ReturnUrl" class="btn btn-default">返回列表</a>
+        </div>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>记录ID</th>
+                <th>部门</th>
+                <th>业务员</th>
+                <th>操作结果</th>
+                <th>结果说明</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.DeptName</td>
+                    <td>@item.SalerName</td>
+                    <td>@item.Result</td>
+                    <td>@item.Remark</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

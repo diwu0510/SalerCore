@@ -1,0 +1,156 @@
+﻿@model Zodo.Saler.Services.MonthReportSearchParam
+
+@{
+    ViewData["Title"] = "月统计管理";
+}
+
+<div class="container-fluid full-height">
+    <div id="container-header">
+        <form id="form" onsubmit="return false;">
+            <div class="toolbar row">
+                <div class="col-4">
+                    <a id="btn-template"
+                       href="javascript:;"
+                       target="_blank"
+                       class="btn btn-green"><i class="fa fa-download"></i>导出Excel</a>
+                    <a id="btn-edit"
+                       href="javascript:;"
+                       data-action="/Report/SyncData"
+                       data-type="ajax"
+                       data-grid="grid"
+                       data-options='{"msg": "确认更新此数据？"}'
+                       class="btn btn-blue btn-customer"><i class="fa fa-pencil-square"></i>更新同环比数据</a>
+                    <a id="btn-edit"
+                       href="javascript:;"
+                       data-action="/Report/Details"
+                       data-type="pop"
+                       data-grid="grid"
+                       data-options='{"title": "详情", "width": 720, "height": 480, "before": null}'
+                       class="btn btn-success btn-customer"><i class="fa fa-pencil-square"></i>详情</a>
+                    <a id="btn-refresh" href="javascript:;" class="btn btn-default" onclick="window.grid.reload();"><i class="fa fa-refresh"></i> 刷新</a>
+                </div>
+                <div class="col-8 content-right">
+                    @Html.AntiForgeryToken()
+                    <select asp-for="Year" asp-items="ViewBag.Years">
+                        <option value="">年</option>
+                    </select>
+                    <select asp-for="Month" asp-items="ViewBag.Months">
+                        <option value="">月</option>
+                    </select>
+                    <select asp-for="DeptId" asp-items="ViewBag.Depts">
+                        <option value="">选择部门</option>
+                    </select>
+                    <input asp-for="Key" type="search" value="" placeholder="关键字" />
+                    <input type="button" class="btn btn-blue" value="搜索" onclick="window.grid.reload()">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="list" class="grid-box"></div>
+</div>
+
+@section scripts
+    {
+    <script src="~/lib/myui/myGrid.v6.js"></script>
+    <script>
+        var grid = $('#list').MyGrid({
+            api: '/Report/Get',
+            columns: [
+                { title: '编号', type: 'indexNum', width: 40, fixed: 'left' },
+                //{ title: '部门', field: 'deptName', width: 120, fixed: 'left' },
+                {
+                    title: '业务员', do: function (item) {
+                        return '[' + item.deptName + '][' + item.job + '] ' + item.salerName;
+                    }, width: 200, fixed: 'left'
+                },
+                //{ title: '业务员', field: 'salerName', width: 90, fixed: 'left' },
+                { title: '年度', field: 'year', width: 60, fixed: 'left' },
+                { title: '月份', field: 'month', width: 60, fixed: 'left' },
+                //{ title: '职位', field: 'job', width: 100 },
+                { title: '飞机', field: 'fj', width: 50, className: 'bg-1' },
+                { title: '火车', field: 'hc', width: 50, className: 'bg-1' },
+                { title: '巴士', field: 'bs', width: 50, className: 'bg-1' },
+                { title: '自驾车', field: 'zjc', width: 60, className: 'bg-1' },
+                { title: '的士费', field: 'dsf', width: 60, className: 'bg-1' },
+                { title: '业务招待费', field: 'ywzdf', width: 80, className: 'bg-1' },
+                { title: '住宿费', field: 'zsf', width: 60, className: 'bg-1' },
+                { title: '节约奖励', field: 'zsjyjl', width: 70, className: 'bg-1' },
+                { title: '交通津贴', field: 'jtjt', width: 70, className: 'bg-1' },
+                { title: '餐费津贴', field: 'cfjt', width: 70, className: 'bg-1' },
+                { title: '通讯费', field: 'txf', width: 60, className: 'bg-1' },
+                { title: '其他费用', field: 'qtfy', width: 70, className: 'bg-1' },
+                { title: '薪资', field: 'xz', width: 70, className: 'bg-2' },
+                { title: '合计', field: 'hj', width: 70, className: 'bg-5' },
+                { title: '业绩', field: 'yj', width: 70, className: 'bg-3' },
+                { title: '账面毛利', field: 'zmml', width: 70, className: 'bg-3' },
+                {
+                    title: '毛利', do: function (item) {
+                        if (item.ml <= 0) {
+                            return '<span class="font-red">' + item.ml + '</span>';
+                        } else {
+                            return item.ml;
+                        }
+                    }, width: 70, className: 'bg-3'
+                },
+                { title: '服务费', field: 'fwf', width: 70, className: 'bg-4' },
+                {
+                    title: '毛利率', do: function (item) {
+                        if (item.mll <= 0) {
+                            return '<span class="font-red">' + (item.mll * 100).toFixed(2) + '%' + '</span>';
+                        } else {
+                            return (item.mll * 100) + '%';
+                        }
+                    }, width: 70, className: 'bg-5'
+                },
+                {
+                    title: '销售占比', do: function (item) {
+                        if (item.xsfyzyj <= 0) {
+                            return '<span class="font-red">' + (item.xsfyzyj * 100).toFixed(2) + '%' + '</span>';
+                        } else {
+                            return (item.xsfyzyj * 100).toFixed(2) + '%';
+                        }
+                    }, width: 70, className: 'bg-5'
+                },
+                {
+                    title: '效益', do: function (item) {
+                        if (item.xy <= 0) {
+                            return '<span class="font-red">' + item.xy + '</span>';
+                        } else {
+                            return item.xy;
+                        }
+                    }, width: 90, className: 'bg-5'
+                },
+                { title: '同比效益', field: 'lastYearXY', width: 70, className: 'bg-6' },
+                { title: '环比效益', field: 'lastMonthXY', width: 70, className: 'bg-6' }
+            ],
+            keyColumn: 'id',
+            height: function() {
+                var h = $(window).height() - $('#container-header').height() - 40;
+                return h;
+            },
+            pageSize: 20,
+            dataConvertFn: function(source) { return source; },
+            renderCompleteFn: null,
+            filterFn: function() { return $('#form').serialize(); },
+            ajaxErrorFn: null,
+            ajaxBeforeSendFn: null,
+            click: function(item) { },
+            dblClick: function(item) { $('#btn-edit').trigger('click'); },
+            multi: false,
+            pager: false,
+            auto: true
+        });
+
+        $('#btn-template').on('click', function () {
+            var year = $('#Year').val();
+            var month = $('#Month').val();
+            if (!year || !month) {
+                return layer.msg('必须指定年度和月份');
+            } else {
+                var url = '/Report/Export?year=' + year + '&month=' + month;
+                window.open(url, '_blank', 'title=下载月报表');
+            }
+        });
+    </script>
+}
+

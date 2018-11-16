@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Zodo.Saler.Services.MonthReportDto>
+
+@{
+    ViewData["Title"] = "Items";
+}
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>月份</th>
+            <th>业务员</th>
+            <th>业绩</th>
+            <th>服务费</th>
+            <th>账面毛利</th>
+            <th>毛利</th>
+            <th>成本合计</th>
+            <th>效益</th>
+            <th>上月效益</th>
+            <th>上年同期</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Month)</td>
+            <td>@Html.DisplayFor(modelItem => item.SalerName)</td>
+            <td>@Html.DisplayFor(modelItem => item.YJ)</td>
+            <td>@Html.DisplayFor(modelItem => item.FWF)</td>
+            <td>@Html.DisplayFor(modelItem => item.ZMML)</td>
+            <td>@Html.DisplayFor(modelItem => item.ML)</td>
+            <td>@Html.DisplayFor(modelItem => item.HJ)</td>
+            <td>@Html.DisplayFor(modelItem => item.XY)</td>
+            <td>@Html.DisplayFor(modelItem => item.LastMonthXY)</td>
+            <td>@Html.DisplayFor(modelItem => item.LastYearXY)</td>
+        </tr>
+}
+    </tbody>
+</table>

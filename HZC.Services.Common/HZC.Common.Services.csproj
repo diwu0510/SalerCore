@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HZC.Core\HZC.Core.csproj" />
+    <ProjectReference Include="..\HZC.Database\HZC.Database.csproj" />
+    <ProjectReference Include="..\HZC.Utils\HZC.Utils.csproj" />
+  </ItemGroup>
+
+</Project>

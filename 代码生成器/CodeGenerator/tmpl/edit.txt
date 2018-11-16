@@ -1,0 +1,129 @@
+﻿<%@ Page Title="{{tablename}}" Language="C#" MasterPageFile="~/MasterPages/MasterEditPage.Master" AutoEventWireup="true" CodeBehind="{{tablename}}Edit.aspx.cs" Inherits="WFPB.Web.Areas.Sys.{{tablename}}Edit" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="SearchBoxPlaceHolder" runat="server">
+    <asp:HiddenField ID="F_{{tablename}}Id" runat="server" Value="0" />
+    <table class="table table-edit bg-white">
+        <tr>
+{{each edit}}
+            <td class="table-edit-label">{{columnDescribe}}</td><td>{{serverControl}}</td>
+{{end}}
+        </tr>
+        <tr>
+            <td colspan="4" class="align-mid">
+                <asp:Literal ID="F_Errors" runat="server"></asp:Literal>
+                <asp:LinkButton ID="F_Submit" CssClass="butt butt-blue" runat="server" OnClick="F_Submit_Click">提交</asp:LinkButton>
+                <a href="{{tablename}}List.aspx" class="butt">返回</a>
+            </td>
+        </tr>
+    </table>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="ScriptsPlaceHolder" runat="server">
+</asp:Content>
+[PageEnd]
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using WFPB.Core.Data;
+using WFPB.Core.Models;
+
+namespace WFPB.Web.Areas.Sys
+{
+    public partial class {{tablename}}Edit : BasePage
+    {
+        DbContext context = new DbContext();
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                int id = PageHelper.GetIntParamFromPage("id", 0);
+                if (id > 0)
+                {
+                    // 编辑
+                    var model = context.{{tablename}}.Load(id);
+                    
+                    if (model == null)
+                    {
+                        // 如果不存在，跳转到空数据页
+                        PageHelper.EmptyRequest(this);
+                    }
+                    else
+                    {
+                        F_{{tablename}}Id.Value = model.{{tablename}}Id.ToString();
+                        MapModelToControls(model);
+                    }
+                }
+                else if (id < 0)
+                {
+                    // 说明参数错误
+                    PageHelper.BadRequest(this);
+                }
+            }
+        }
+
+        protected void MapModelToControls({{tablename}} model)
+        {
+{{each edit}}
+            {{modelToControl}};
+{{end}}
+        }
+
+        protected void MapControlsToModel({{tablename}} model)
+        {
+            model.{{tablename}}Id = Int32.Parse(F_{{tablename}}Id.Value);
+{{each edit}}
+            {{controlToModel}};
+{{end}}
+        }
+
+        protected void F_Submit_Click(object sender, EventArgs e)
+        {
+            {{tablename}} model = new {{tablename}}();
+            MapControlsToModel(model);
+
+            List<ValidateError> errors = new List<ValidateError>();
+            errors = context.EquipmentModel.Validate(model);
+
+            if (errors.Count > 0)
+            {
+                F_Errors.Text = ValidateErrorHelper.AlertErrors(errors);
+                return;
+            }
+
+            int result = 0;
+
+            if (model.{{tablename}}Id == 0)
+            {
+                result= context.{{tablename}}.Create(model, Operator.UserId);
+            }
+            else
+            {
+                result= context.{{tablename}}.Update(model, Operator.UserId);
+            }
+
+            if (result > 0)
+            {
+                Response.Redirect("{{tablename}}List.aspx");
+            }
+            else
+            {
+                errors.Add(new ValidateError(299, "操作失败"));
+                F_Errors.Text = ValidateErrorHelper.AlertErrors(errors);
+            }
+        }
+    }
+}
+[PageEnd]
+namespace WFPB.Web.Areas.Sys {
+    
+    public partial class {{tablename}}Edit {
+        protected global::System.Web.UI.WebControls.LinkButton F_Submit;
+        protected global::System.Web.UI.WebControls.HiddenField F_{{tablename}}Id;
+{{each edit}}
+        {{serverControlName}}
+{{end}}
+    }
+}
