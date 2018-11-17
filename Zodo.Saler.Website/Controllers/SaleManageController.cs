@@ -376,7 +376,7 @@ namespace Zodo.Saler.Website.Controllers
                                 r.Result = "数据清洗失败";
                                 r.Remark = "年度和月度与源数据不符";
                             }
-                            else if (s.SalerName != salerName.Trim() || s.DeptName != deptName.Trim())
+                            else if (s.SalerName.Trim() != salerName.Trim() || s.DeptName.Trim() != deptName.Trim())
                             {
                                 r.Result = "数据清洗失败";
                                 r.Remark = "部门和业务员不匹配";
