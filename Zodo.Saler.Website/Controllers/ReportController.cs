@@ -157,11 +157,11 @@ namespace Zodo.Saler.Website.Controllers
                     workSheet.Cells[1, 11, 2, 12].Merge = true;
                     workSheet.Cells[1, 11, 2, 13].Merge = true;
 
-                    workSheet.Cells[1, 14].Value = "出差津贴";
+                    workSheet.Cells[1, 14].Value = "出差补贴";
                     workSheet.Cells[1, 14, 1, 15].Merge = true;
 
-                    workSheet.Cells[2, 14].Value = "交通津贴";
-                    workSheet.Cells[2, 15].Value = "餐费津贴";
+                    workSheet.Cells[2, 14].Value = "招标费用";
+                    workSheet.Cells[2, 15].Value = "出差补贴";
 
                     workSheet.Cells[1, 16].Value = "通讯费";
                     workSheet.Cells[1, 17].Value = "其他费用";
@@ -211,8 +211,8 @@ namespace Zodo.Saler.Website.Controllers
                         workSheet.Cells[rowIndex, 11].Value = report.YWZDF;
                         workSheet.Cells[rowIndex, 12].Value = report.ZSF;
                         workSheet.Cells[rowIndex, 13].Value = report.ZSJYJL;
-                        workSheet.Cells[rowIndex, 14].Value = report.JTJT;
-                        workSheet.Cells[rowIndex, 15].Value = report.CFJT;
+                        workSheet.Cells[rowIndex, 14].Value = report.ZBFY;
+                        workSheet.Cells[rowIndex, 15].Value = report.CCBT;
                         workSheet.Cells[rowIndex, 16].Value = report.TXF;
                         workSheet.Cells[rowIndex, 17].Value = report.QTFY;
                         workSheet.Cells[rowIndex, 18].Value = report.XZ;

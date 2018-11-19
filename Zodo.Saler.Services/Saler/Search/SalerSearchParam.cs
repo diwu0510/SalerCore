@@ -6,6 +6,11 @@ namespace Zodo.Saler.Services
     public partial class SalerSearchParam : ISearchParam
     {
         /// <summary>
+        /// 
+        /// </summary>
+        public string EmployeeNumber { get; set; }
+
+        /// <summary>
         /// 关键字
         /// </summary>
         public string Key { get; set; }
@@ -27,6 +32,11 @@ namespace Zodo.Saler.Services
             if (!string.IsNullOrWhiteSpace(Key))
             {
                 util.AndContains("Name", Key.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(EmployeeNumber))
+            {
+                util.AndContains("EmployeeNumber", EmployeeNumber.Trim());
             }
 
             if (!string.IsNullOrWhiteSpace(Job))

@@ -8,7 +8,7 @@
     <div id="container-header">
         <form id="form" onsubmit="return false;">
             <div class="toolbar row">
-                <div class="col-4">
+                <div class="col-6">
                     <a id="btn-create"
                        href="javascript:;"
                        data-action="/MonthReport/MultiCreate"
@@ -30,7 +30,7 @@
                        class="btn btn-red btn-customer"><i class="fa fa-trash-o"></i> 删除</a>
                     <a id="btn-refresh" href="javascript:;" class="btn btn-default" onclick="window.grid.reload();"><i class="fa fa-refresh"></i> 刷新</a>
                 </div>
-                <div class="col-8 content-right">
+                <div class="col-6 content-right">
                     @Html.AntiForgeryToken()
                     <select asp-for="Year" asp-items="ViewBag.Years">
                         <option value="">年</option>
@@ -71,8 +71,8 @@
                 { title: '业务招待费', field: 'ywzdf', width: 90 },
                 { title: '住宿费', field: 'zsf', width: 60 },
                 { title: '住宿节约奖励', field: 'zsjyjl', width: 100 },
-                { title: '交通津贴', field: 'jtjt', width: 70 },
-                { title: '餐费津贴', field: 'cfjt', width: 70 },
+                { title: '招标费用', field: 'zbfy', width: 70 },
+                { title: '出差补贴', field: 'ccbt', width: 70 },
                 { title: '通讯费', field: 'txf', width: 60 },
                 { title: '其他费用', field: 'qtfy', width: 70 },
                 { title: '薪资', field: 'xz', width: 90 },

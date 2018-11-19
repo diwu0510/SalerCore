@@ -642,12 +642,14 @@
             };
 
             this.setPager = function (total, start) {
+                var that = this;
                 this.recordCount = total;
                 this.pageCount = Math.ceil(this.recordCount / this.pageSize);
                 firstBtn.removeClass('disabled');
                 prevBtn.removeClass('disabled');
                 nextBtn.removeClass('disabled');
                 lastBtn.removeClass('disabled');
+                currentInput.val(that.pageIndex);
                 if (this.pageIndex === 1) {
                     firstBtn.addClass('disabled');
                     prevBtn.addClass('disabled');
@@ -927,6 +929,18 @@
 
         //   10.8 重新拉取数据
         _this.reload = function () {
+            if (api) {
+                _this.pull();
+            } else {
+                _this.render();
+            }
+        };
+
+        //   10.9 搜索
+        _this.search = function () {
+            if (isPager && pager) {
+                pager.pageIndex = 1;
+            }
             if (api) {
                 _this.pull();
             } else {

@@ -31,11 +31,11 @@ namespace Zodo.Saler.Website.Controllers
         }
 
         #region 列表页
-        public ActionResult Index()
+        public ActionResult Index(int? year = null, int? month = null)
         {
             MonthReportSearchParam param = new MonthReportSearchParam();
-            param.Year = DateTime.Today.Year;
-            param.Month = DateTime.Today.Month;
+            param.Year = year ?? DateTime.Today.Year;
+            param.Month = month ?? DateTime.Today.Month;
             InitUI();
             return View(param);
         }
@@ -148,37 +148,38 @@ namespace Zodo.Saler.Website.Controllers
                     workSheet.Cells.Style.Font.Size = 9;
                     workSheet.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     workSheet.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                    workSheet.Column(12).Width = 13;
-                    workSheet.Column(14).Width = 14;
+                    workSheet.Column(13).Width = 13;
+                    workSheet.Column(15).Width = 14;
 
-                    workSheet.Cells[1, 1, 1, 18].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 18].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 18].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 18].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 18].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                    workSheet.Cells[1, 1, 1, 19].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 19].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 19].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 19].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 19].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
 
                     int rowIndex = 1;
-                    workSheet.Cells[rowIndex, 1, rowIndex, 18].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    workSheet.Cells[rowIndex, 1, rowIndex, 18].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+                    workSheet.Cells[rowIndex, 1, rowIndex, 19].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    workSheet.Cells[rowIndex, 1, rowIndex, 19].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
 
                     workSheet.Cells[rowIndex, 1].Value = "编号";
                     workSheet.Cells[rowIndex, 2].Value = "年";
                     workSheet.Cells[rowIndex, 3].Value = "月";
                     workSheet.Cells[rowIndex, 4].Value = "部门";
-                    workSheet.Cells[rowIndex, 5].Value = "业务员";
-                    workSheet.Cells[rowIndex, 6].Value = "职位";
-                    workSheet.Cells[rowIndex, 7].Value = "飞机";
-                    workSheet.Cells[rowIndex, 8].Value = "火车";
-                    workSheet.Cells[rowIndex, 9].Value = "巴士";
-                    workSheet.Cells[rowIndex, 10].Value = "自驾车";
-                    workSheet.Cells[rowIndex, 11].Value = "的士费";
-                    workSheet.Cells[rowIndex, 12].Value = "业务招待费";
-                    workSheet.Cells[rowIndex, 13].Value = "住宿费";
-                    workSheet.Cells[rowIndex, 14].Value = "住宿节约奖励";
-                    workSheet.Cells[rowIndex, 15].Value = "交通津贴";
-                    workSheet.Cells[rowIndex, 16].Value = "餐费津贴";
-                    workSheet.Cells[rowIndex, 17].Value = "通讯费";
-                    workSheet.Cells[rowIndex, 18].Value = "其他费用";
+                    workSheet.Cells[rowIndex, 5].Value = "员工编号";
+                    workSheet.Cells[rowIndex, 6].Value = "业务员";
+                    workSheet.Cells[rowIndex, 7].Value = "职位";
+                    workSheet.Cells[rowIndex, 8].Value = "飞机";
+                    workSheet.Cells[rowIndex, 9].Value = "火车";
+                    workSheet.Cells[rowIndex, 10].Value = "巴士";
+                    workSheet.Cells[rowIndex, 11].Value = "自驾车";
+                    workSheet.Cells[rowIndex, 12].Value = "的士费";
+                    workSheet.Cells[rowIndex, 13].Value = "业务招待费";
+                    workSheet.Cells[rowIndex, 14].Value = "住宿费";
+                    workSheet.Cells[rowIndex, 15].Value = "住宿节约奖励";
+                    workSheet.Cells[rowIndex, 16].Value = "招标费用";
+                    workSheet.Cells[rowIndex, 17].Value = "出差补贴";
+                    workSheet.Cells[rowIndex, 18].Value = "通讯费";
+                    workSheet.Cells[rowIndex, 19].Value = "其他费用";
 
                     workSheet.Row(rowIndex).Height = 28;
 
@@ -189,27 +190,29 @@ namespace Zodo.Saler.Website.Controllers
                         workSheet.Cells[rowIndex, 1].Value = report.Id;
                         workSheet.Cells[rowIndex, 2].Value = report.Year;
                         workSheet.Cells[rowIndex, 3].Value = report.Month;
-                        workSheet.Cells[rowIndex, 4].Value = report.DeptName.ToString();
-                        workSheet.Cells[rowIndex, 5].Value = report.SalerName.ToString();
-                        workSheet.Cells[rowIndex, 6].Value = report.Job;
-                        workSheet.Cells[rowIndex, 7].Value = report.FJ;
-                        workSheet.Cells[rowIndex, 8].Value = report.HC;
-                        workSheet.Cells[rowIndex, 9].Value = report.BS;
-                        workSheet.Cells[rowIndex, 10].Value = report.ZJC;
-                        workSheet.Cells[rowIndex, 11].Value = report.DSF;
-                        workSheet.Cells[rowIndex, 12].Value = report.YWZDF;
-                        workSheet.Cells[rowIndex, 13].Value = report.ZSF;
-                        workSheet.Cells[rowIndex, 14].Value = report.ZSJYJL;
-                        workSheet.Cells[rowIndex, 15].Value = report.JTJT;
-                        workSheet.Cells[rowIndex, 16].Value = report.CFJT;
-                        workSheet.Cells[rowIndex, 17].Value = report.TXF;
-                        workSheet.Cells[rowIndex, 18].Value = report.QTFY;
+                        workSheet.Cells[rowIndex, 4].Value = report.DeptName;
+                        workSheet.Cells[rowIndex, 5].Value = report.EmployeeNumber;
+                        workSheet.Cells[rowIndex, 6].Value = report.SalerName;
+                        workSheet.Cells[rowIndex, 7].Value = report.Job;
+                        workSheet.Cells[rowIndex, 8].Value = report.FJ;
+                        workSheet.Cells[rowIndex, 9].Value = report.HC;
+                        workSheet.Cells[rowIndex, 10].Value = report.BS;
+                        workSheet.Cells[rowIndex, 11].Value = report.ZJC;
+                        workSheet.Cells[rowIndex, 12].Value = report.DSF;
+                        workSheet.Cells[rowIndex, 13].Value = report.YWZDF;
+                        workSheet.Cells[rowIndex, 14].Value = report.ZSF;
+                        workSheet.Cells[rowIndex, 15].Value = report.ZSJYJL;
+                        workSheet.Cells[rowIndex, 16].Value = report.ZBFY;
+                        workSheet.Cells[rowIndex, 17].Value = report.CCBT;
+                        workSheet.Cells[rowIndex, 18].Value = report.TXF;
+                        workSheet.Cells[rowIndex, 19].Value = report.QTFY;
 
-                        workSheet.Cells[rowIndex, 1, rowIndex, 18].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 18].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 18].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 18].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 18].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                        workSheet.Cells[rowIndex, 1, rowIndex, 19].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 19].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 19].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 19].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 19].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 19].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
 
                         workSheet.Row(rowIndex).Height = 24;
                         rowIndex++;
@@ -281,7 +284,7 @@ namespace Zodo.Saler.Website.Controllers
                     int rowCount = worksheet.Dimension.Rows;
                     int ColCount = worksheet.Dimension.Columns;
 
-                    if (ColCount != 18)
+                    if (ColCount != 19)
                     {
                         return Content("不合法的数据列");
                     }
@@ -311,8 +314,8 @@ namespace Zodo.Saler.Website.Controllers
                             decimal ywzdf = 0;
                             decimal zsf = 0;
                             decimal zsjyjl = 0;
-                            decimal jtjt = 0;
-                            decimal cfjt = 0;
+                            decimal zbfy = 0;
+                            decimal ccbt = 0;
                             decimal txf = 0;
                             decimal qtfy = 0;
 
@@ -323,18 +326,18 @@ namespace Zodo.Saler.Website.Controllers
                             int.TryParse(sheet.Cells[idx, 3].Value.ToString(), out m);
 
                             int.TryParse(sheet.Cells[idx, 1].Value.ToString(), out id);
-                            decimal.TryParse(sheet.Cells[idx, 7].Value.ToString(), out fj);
-                            decimal.TryParse(sheet.Cells[idx, 8].Value.ToString(), out hc);
-                            decimal.TryParse(sheet.Cells[idx, 9].Value.ToString(), out bs);
-                            decimal.TryParse(sheet.Cells[idx, 10].Value.ToString(), out zjc);
-                            decimal.TryParse(sheet.Cells[idx, 11].Value.ToString(), out dsf);
-                            decimal.TryParse(sheet.Cells[idx, 12].Value.ToString(), out ywzdf);
-                            decimal.TryParse(sheet.Cells[idx, 13].Value.ToString(), out zsf);
-                            decimal.TryParse(sheet.Cells[idx, 14].Value.ToString(), out zsjyjl);
-                            decimal.TryParse(sheet.Cells[idx, 15].Value.ToString(), out jtjt);
-                            decimal.TryParse(sheet.Cells[idx, 16].Value.ToString(), out cfjt);
-                            decimal.TryParse(sheet.Cells[idx, 17].Value.ToString(), out txf);
-                            decimal.TryParse(sheet.Cells[idx, 18].Value.ToString(), out qtfy);
+                            decimal.TryParse(sheet.Cells[idx, 8].Value.ToString(), out fj);
+                            decimal.TryParse(sheet.Cells[idx, 9].Value.ToString(), out hc);
+                            decimal.TryParse(sheet.Cells[idx, 10].Value.ToString(), out bs);
+                            decimal.TryParse(sheet.Cells[idx, 11].Value.ToString(), out zjc);
+                            decimal.TryParse(sheet.Cells[idx, 12].Value.ToString(), out dsf);
+                            decimal.TryParse(sheet.Cells[idx, 13].Value.ToString(), out ywzdf);
+                            decimal.TryParse(sheet.Cells[idx, 14].Value.ToString(), out zsf);
+                            decimal.TryParse(sheet.Cells[idx, 15].Value.ToString(), out zsjyjl);
+                            decimal.TryParse(sheet.Cells[idx, 16].Value.ToString(), out zbfy);
+                            decimal.TryParse(sheet.Cells[idx, 17].Value.ToString(), out ccbt);
+                            decimal.TryParse(sheet.Cells[idx, 18].Value.ToString(), out txf);
+                            decimal.TryParse(sheet.Cells[idx, 19].Value.ToString(), out qtfy);
 
 
                             entity.Id = id;
@@ -346,15 +349,15 @@ namespace Zodo.Saler.Website.Controllers
                             entity.YWZDF = ywzdf;
                             entity.ZSF = zsf;
                             entity.ZSJYJL = zsjyjl;
-                            entity.JTJT = jtjt;
-                            entity.CFJT = cfjt;
+                            entity.ZBFY = zbfy;
+                            entity.CCBT = ccbt;
                             entity.TXF = txf;
                             entity.QTFY = qtfy;
                             entity.Year = y;
                             entity.Month = m;
 
                             var deptName = sheet.Cells[idx, 4].Value.ToString();
-                            var salerName = sheet.Cells[idx, 5].Value.ToString();
+                            var salerName = sheet.Cells[idx, 6].Value.ToString();
 
                             var r = new ImportResultViewModel
                             {

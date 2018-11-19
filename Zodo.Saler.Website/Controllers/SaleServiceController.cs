@@ -30,11 +30,11 @@ namespace Zodo.Saler.Website.Controllers
         }
 
         #region 列表页
-        public ActionResult Index()
+        public ActionResult Index(int? year = null, int? month = null)
         {
             MonthReportSearchParam param = new MonthReportSearchParam();
-            param.Year = DateTime.Today.Year;
-            param.Month = DateTime.Today.Month;
+            param.Year = year ?? DateTime.Today.Year;
+            param.Month = month ?? DateTime.Today.Month;
             InitUI();
             return View(param);
         }
@@ -148,24 +148,25 @@ namespace Zodo.Saler.Website.Controllers
                     workSheet.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     workSheet.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                    workSheet.Cells[1, 1, 1, 8].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 8].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 8].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 8].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                    workSheet.Cells[1, 1, 1, 8].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                    workSheet.Cells[1, 1, 1, 9].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 9].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 9].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 9].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    workSheet.Cells[1, 1, 1, 9].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
 
                     int rowIndex = 1;
                     workSheet.Cells[1, 1, 1, 9].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    workSheet.Cells[1, 1, 1, 8].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+                    workSheet.Cells[1, 1, 1, 9].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
 
                     workSheet.Cells[rowIndex, 1].Value = "编号";
                     workSheet.Cells[rowIndex, 2].Value = "年";
                     workSheet.Cells[rowIndex, 3].Value = "月";
                     workSheet.Cells[rowIndex, 4].Value = "部门";
-                    workSheet.Cells[rowIndex, 5].Value = "业务员";
-                    workSheet.Cells[rowIndex, 6].Value = "职位";
-                    workSheet.Cells[rowIndex, 7].Value = "业绩";
-                    workSheet.Cells[rowIndex, 8].Value = "账面毛利";
+                    workSheet.Cells[rowIndex, 5].Value = "员工编号";
+                    workSheet.Cells[rowIndex, 6].Value = "业务员";
+                    workSheet.Cells[rowIndex, 7].Value = "职位";
+                    workSheet.Cells[rowIndex, 8].Value = "业绩";
+                    workSheet.Cells[rowIndex, 9].Value = "账面毛利";
 
                     workSheet.Row(rowIndex).Height = 28;
 
@@ -176,17 +177,19 @@ namespace Zodo.Saler.Website.Controllers
                         workSheet.Cells[rowIndex, 1].Value = report.Id;
                         workSheet.Cells[rowIndex, 2].Value = report.Year;
                         workSheet.Cells[rowIndex, 3].Value = report.Month;
-                        workSheet.Cells[rowIndex, 4].Value = report.DeptName.ToString();
-                        workSheet.Cells[rowIndex, 5].Value = report.SalerName.ToString();
-                        workSheet.Cells[rowIndex, 6].Value = report.Job;
-                        workSheet.Cells[rowIndex, 7].Value = report.YJ;
-                        workSheet.Cells[rowIndex, 8].Value = report.ZMML;
+                        workSheet.Cells[rowIndex, 4].Value = report.DeptName;
+                        workSheet.Cells[rowIndex, 5].Value = report.EmployeeNumber;
+                        workSheet.Cells[rowIndex, 6].Value = report.SalerName;
+                        workSheet.Cells[rowIndex, 7].Value = report.Job;
+                        workSheet.Cells[rowIndex, 8].Value = report.YJ;
+                        workSheet.Cells[rowIndex, 9].Value = report.ZMML;
 
-                        workSheet.Cells[rowIndex, 1, rowIndex, 8].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 8].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 8].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 8].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                        workSheet.Cells[rowIndex, 1, rowIndex, 8].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        workSheet.Cells[rowIndex, 1, rowIndex, 9].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
 
                         workSheet.Row(rowIndex).Height = 24;
                         rowIndex++;
@@ -257,7 +260,7 @@ namespace Zodo.Saler.Website.Controllers
                     int rowCount = worksheet.Dimension.Rows;
                     int ColCount = worksheet.Dimension.Columns;
 
-                    if (ColCount != 8)
+                    if (ColCount != 9)
                     {
                         return Content("不合法的数据列");
                     }
@@ -289,8 +292,8 @@ namespace Zodo.Saler.Website.Controllers
                             int.TryParse(sheet.Cells[idx, 3].Value.ToString(), out m);
 
                             int.TryParse(sheet.Cells[idx, 1].Value.ToString(), out id);
-                            decimal.TryParse(sheet.Cells[idx, 7].Value.ToString(), out yj);
-                            decimal.TryParse(sheet.Cells[idx, 8].Value.ToString(), out zmml);
+                            decimal.TryParse(sheet.Cells[idx, 8].Value.ToString(), out yj);
+                            decimal.TryParse(sheet.Cells[idx, 9].Value.ToString(), out zmml);
 
 
                             entity.Id = id;
@@ -300,7 +303,7 @@ namespace Zodo.Saler.Website.Controllers
                             entity.Month = m;
 
                             var deptName = sheet.Cells[idx, 4].Value.ToString();
-                            var salerName = sheet.Cells[idx, 5].Value.ToString();
+                            var salerName = sheet.Cells[idx, 6].Value.ToString();
 
                             var r = new ImportResultViewModel
                             {

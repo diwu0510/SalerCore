@@ -11,6 +11,11 @@ namespace Zodo.Saler.Services
         public int DeptId { get; set; }
 
         /// <summary>
+        /// 员工编号
+        /// </summary>
+        public string EmployeeNumber { get; set; }
+
+        /// <summary>
         /// 销售姓名
         /// </summary>
         public string Name { get; set; }

@@ -78,14 +78,14 @@ namespace Zodo.Saler.Services
         public decimal ZSJYJL { get; set; } = 0;
 
         /// <summary>
-        /// 交通津贴
+        /// 招标费用
         /// </summary>
-        public decimal JTJT { get; set; } = 0;
+        public decimal ZBFY { get; set; } = 0;
 
         /// <summary>
-        /// 餐费津贴
+        /// 出差补贴
         /// </summary>
-        public decimal CFJT { get; set; } = 0;
+        public decimal CCBT { get; set; } = 0;
 
         /// <summary>
         /// 通讯费

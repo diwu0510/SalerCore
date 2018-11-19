@@ -8,7 +8,7 @@
     <div id="container-header">
         <form id="form" onsubmit="return false;">
             <div class="toolbar row">
-                <div class="col-4">
+                <div class="col-6">
                     <a id="btn-create"
                        href="javascript:;"
                        data-action="/SaleService/Edit"
@@ -26,7 +26,7 @@
                        class="btn btn-success"><i class="fa fa-pencil-square"></i>导入数据</a>
                     <a id="btn-refresh" href="javascript:;" class="btn btn-default" onclick="window.grid.reload();"><i class="fa fa-refresh"></i> 刷新</a>
                 </div>
-                <div class="col-8 content-right">
+                <div class="col-6 content-right">
                     @Html.AntiForgeryToken()
                     <select asp-for="Year" asp-items="ViewBag.Years">
                         <option value="">年</option>
@@ -55,6 +55,7 @@
             columns: [
                 { title: '编号', type: 'indexNum', width: 40 },
                 { title: '部门', field: 'deptName', width: 120 },
+                { title: '员工编号', field: 'employeeNumber', width: 100 },
                 { title: '业务员', field: 'salerName', width: 100 },
                 { title: '职位', field: 'job', width: 100 },
                 { title: '年度', field: 'year', width: 60 },

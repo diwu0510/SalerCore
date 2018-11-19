@@ -10,19 +10,17 @@
     <div class="form-box-fixed-container">
         <div class="form-box">
             <div class="row">
-                <div class="row">
-                    <div class="label"><span class="font-red">*</span> 用户名</div>
-                    <div class="control">
-                        <input type="text" asp-for="Name" isvalid="yes" checkexpession="NotNull" />
-                    </div>
+                <div class="label"><span class="font-red">*</span> 用户名</div>
+                <div class="control">
+                    <input type="text" asp-for="Name" isvalid="yes" checkexpession="NotNull" />
                 </div>
-                <div class="row">
-                    <div class="label"><span class="font-red">*</span> 角色</div>
-                    <div class="control">
-                        <select asp-for="Role" asp-items="ViewBag.Roles" isvalid="yes" checkexpession="NotNull">
-                            <option value="">请选择</option>
-                        </select>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="label"><span class="font-red">*</span> 角色</div>
+                <div class="control">
+                    <select asp-for="Role" asp-items="ViewBag.Roles" isvalid="yes" checkexpession="NotNull">
+                        <option value="">请选择</option>
+                    </select>
                 </div>
             </div>
         </div>

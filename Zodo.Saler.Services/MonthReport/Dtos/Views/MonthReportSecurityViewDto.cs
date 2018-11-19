@@ -11,6 +11,11 @@
         public int Id { get; set; }
 
         /// <summary>
+        /// 员工编号
+        /// </summary>
+        public string EmployeeNumber { get; set; } = "";
+
+        /// <summary>
         /// 销售ID
         /// </summary>
         public string SalerName { get; set; }

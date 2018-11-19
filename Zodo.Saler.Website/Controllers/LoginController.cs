@@ -75,11 +75,7 @@ namespace Zodo.Saler.Website.Controllers
             var user = service.Login(model.Name.Trim(), model.Pw.Trim());
             if (user.Code != 200)
             {
-                return Json(ResultUtil.AuthFail("用户不存在"));
-            }
-            else if (AESEncryptor.Decrypt(user.Body.Pw) != model.Pw)
-            {
-                return Json(ResultUtil.AuthFail("帐号或密码错误"));
+                return Json(ResultUtil.AuthFail(user.Message));
             }
             else
             {

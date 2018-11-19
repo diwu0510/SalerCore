@@ -1,5 +1,6 @@
 ﻿using HZC.Common.Services;
 using HZC.Core;
+using HZC.Database;
 using System.Collections.Generic;
 
 namespace Zodo.Saler.Services
@@ -38,12 +39,51 @@ namespace Zodo.Saler.Services
                 return "业务员职位不能为空";
             }
 
+            if (string.IsNullOrWhiteSpace(t.EmployeeNumber))
+            {
+                return "员工编号不能为空";
+            }
+
+            var count = db.GetCount<SalerEntity>(
+                MySearchUtil.New()
+                    .AndEqual("EmployeeNumber", t.EmployeeNumber.Trim())
+                    .AndEqual("IsDel", false));
+            if (count > 0)
+            {
+                return "员工编号已存在";
+            }
+
             return string.Empty;
         }
 
         protected override string ValidateUpdate(SalerEntity t, IAppUser user)
         {
-            return ValidateCreate(t, user);
+            if (string.IsNullOrWhiteSpace(t.Name))
+            {
+                return "业务员姓名不能为空";
+            }
+
+            if (t.DeptId == 0)
+            {
+                return "必须指定业务员所在部门";
+            }
+            
+            if (string.IsNullOrWhiteSpace(t.EmployeeNumber))
+            {
+                return "员工编号不能为空";
+            }
+
+            var count = db.GetCount<SalerEntity>(
+                MySearchUtil.New()
+                    .AndEqual("EmployeeNumber", t.EmployeeNumber.Trim())
+                    .AndEqual("IsDel", false)
+                    .AndNotEqual("Id", t.Id));
+            if (count > 0)
+            {
+                return "员工编号已存在";
+            }
+
+            return string.Empty;
         }
 
         protected override string ValidateDelete(SalerEntity t, IAppUser user)

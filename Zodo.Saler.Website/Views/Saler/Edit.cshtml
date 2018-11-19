@@ -11,13 +11,19 @@
     <div class="form-box-fixed-container">
         <div class="form-box">
             <div class="row">
-                <div class="label">销售姓名</div>
+                <div class="label"><span class="font-red">*</span> 员工编号</div>
+                <div class="control">
+                    <input type="text" asp-for="EmployeeNumber" isvalid="yes" checkexpession="NotNull" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="label"><span class="font-red">*</span> 销售姓名</div>
                 <div class="control">
                     <input type="text" asp-for="Name" isvalid="yes" checkexpession="NotNull" />
                 </div>
             </div>
             <div class="row">
-                <div class="label">所属部门</div>
+                <div class="label"><span class="font-red">*</span> 所属部门</div>
                 <div class="control">
                     <select asp-for="DeptId" asp-items="ViewBag.Depts" isvalid="yes" checkexpession="NotNull">
                         <option value="">请选择</option>
@@ -25,7 +31,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="label">职位</div>
+                <div class="label"><span class="font-red">*</span> 职位</div>
                 <div class="control">
                     <select asp-for="Job" asp-items="ViewBag.Jobs" isvalid="yes" checkexpession="NotNull">
                         <option value="">请选择</option>
@@ -33,7 +39,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="label">工资</div>
+                <div class="label"><span class="font-red">*</span> 工资</div>
                 <div class="control">
                     <input type="number" asp-for="Salary" isvalid="yes" checkexpession="Number" />
                 </div>

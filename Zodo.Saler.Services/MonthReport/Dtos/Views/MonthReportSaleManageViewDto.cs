@@ -11,6 +11,11 @@
         public int Id { get; set; }
 
         /// <summary>
+        /// 员工编号
+        /// </summary>
+        public string EmployeeNumber { get; set; } = "";
+
+        /// <summary>
         /// 销售ID
         /// </summary>
         public string SalerName { get; set; }
@@ -76,14 +81,14 @@
         public decimal ZSJYJL { get; set; }
 
         /// <summary>
-        /// 交通津贴
+        /// 招标费用
         /// </summary>
-        public decimal JTJT { get; set; }
+        public decimal ZBFY { get; set; }
 
         /// <summary>
-        /// 餐费津贴
+        /// 出差补贴
         /// </summary>
-        public decimal CFJT { get; set; }
+        public decimal CCBT { get; set; }
 
         /// <summary>
         /// 通讯费

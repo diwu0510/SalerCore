@@ -8,7 +8,7 @@
     <div id="container-header">
         <form id="form" onsubmit="return false;">
             <div class="toolbar row">
-                <div class="col-4">
+                <div class="col-6">
                     <a id="btn-template"
                        href="javascript:;"
                        target="_blank"
@@ -29,7 +29,7 @@
                        class="btn btn-success btn-customer"><i class="fa fa-pencil-square"></i>详情</a>
                     <a id="btn-refresh" href="javascript:;" class="btn btn-default" onclick="window.grid.reload();"><i class="fa fa-refresh"></i> 刷新</a>
                 </div>
-                <div class="col-8 content-right">
+                <div class="col-6 content-right">
                     @Html.AntiForgeryToken()
                     <select asp-for="Year" asp-items="ViewBag.Years">
                         <option value="">年</option>
@@ -75,8 +75,8 @@
                 { title: '业务招待费', field: 'ywzdf', width: 80, className: 'bg-1' },
                 { title: '住宿费', field: 'zsf', width: 60, className: 'bg-1' },
                 { title: '节约奖励', field: 'zsjyjl', width: 70, className: 'bg-1' },
-                { title: '交通津贴', field: 'jtjt', width: 70, className: 'bg-1' },
-                { title: '餐费津贴', field: 'cfjt', width: 70, className: 'bg-1' },
+                { title: '招标费用', field: 'zbfy', width: 70, className: 'bg-1' },
+                { title: '出差补贴', field: 'ccbt', width: 70, className: 'bg-1' },
                 { title: '通讯费', field: 'txf', width: 60, className: 'bg-1' },
                 { title: '其他费用', field: 'qtfy', width: 70, className: 'bg-1' },
                 { title: '薪资', field: 'xz', width: 70, className: 'bg-2' },
@@ -98,7 +98,7 @@
                         if (item.mll <= 0) {
                             return '<span class="font-red">' + (item.mll * 100).toFixed(2) + '%' + '</span>';
                         } else {
-                            return (item.mll * 100) + '%';
+                            return (item.mll * 100).toFixed(2) + '%';
                         }
                     }, width: 70, className: 'bg-5'
                 },

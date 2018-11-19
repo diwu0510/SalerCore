@@ -8,7 +8,7 @@
     <div id="container-header">
         <form id="form" onsubmit="return false;">
             <div class="toolbar row">
-                <div class="col-5">
+                <div class="col-6">
                     <a id="btn-create"
                        href="javascript:;"
                        data-action="/SaleManage/Edit"
@@ -26,7 +26,7 @@
                        class="btn btn-success"><i class="fa fa-pencil-square"></i>导入数据</a>
                     <a id="btn-refresh" href="javascript:;" class="btn btn-default" onclick="window.grid.reload();"><i class="fa fa-refresh"></i> 刷新</a>
                 </div>
-                <div class="col-7 content-right">
+                <div class="col-6 content-right">
                     @Html.AntiForgeryToken()
                     <select asp-for="Year" asp-items="ViewBag.Years">
                         <option value="">年</option>
@@ -55,6 +55,7 @@
             columns: [
                 { title: '编号', type: 'indexNum', width: 40 },
                 { title: '部门', field: 'deptName', width: 120 },
+                { title: '员工编号', field: 'employeeNumber', width: 100 },
                 { title: '业务员', field: 'salerName', width: 100 },
                 { title: '职位', field: 'job', width: 100 },
                 { title: '年度', field: 'year', width: 60 },
@@ -67,8 +68,8 @@
                 { title: '业务招待费', field: 'ywzdf', width: 90, className: 'bg-2' },
                 { title: '住宿费', field: 'zsf', width: 60, className: 'bg-3' },
                 { title: '住宿节约奖励', field: 'zsjyjl', width: 100, className: 'bg-3' },
-                { title: '交通津贴', field: 'jtjt', width: 70, className: 'bg-4' },
-                { title: '餐费津贴', field: 'cfjt', width: 70, className: 'bg-4' },
+                { title: '招标费用', field: 'zbfy', width: 70, className: 'bg-4' },
+                { title: '出差补贴', field: 'ccbt', width: 70, className: 'bg-4' },
                 { title: '通讯费', field: 'txf', width: 60, className: 'bg-4' },
                 { title: '其他费用', field: 'qtfy', width: 70, className: 'bg-5' }
             ],

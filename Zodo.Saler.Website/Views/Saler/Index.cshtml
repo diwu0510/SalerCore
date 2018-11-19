@@ -12,21 +12,21 @@
                        data-action="/Saler/Create"
                        data-type="pop"
                        data-options='{"title": "创建", "width": 400, "height": 400, "before": null}'
-                       class="btn btn-green btn-customer"><i class="fa fa-plus-square"></i>添加</a>
+                       class="btn btn-green btn-customer"><i class="fa fa-plus-square"></i> 添加</a>
                     <a id="btn-edit"
                        href="javascript:;"
                        data-action="/Saler/Edit"
                        data-type="pop"
                        data-grid="grid"
                        data-options='{"title": "修改", "width": 400, "height": 400, "before": null}'
-                       class="btn btn-blue btn-customer"><i class="fa fa-pencil-square"></i>修改</a>
+                       class="btn btn-blue btn-customer"><i class="fa fa-pencil-square"></i> 修改</a>
                     <a id="btn-delete"
                        href="javascript:;"
                        data-action="/Saler/Delete"
                        data-type="ajax"
                        data-grid="grid"
                        data-options='{"msg": "确认操作？", "before": null}'
-                       class="btn btn-red btn-customer"><i class="fa fa-trash-o"></i>删除</a>
+                       class="btn btn-red btn-customer"><i class="fa fa-trash-o"></i> 删除</a>
                     <a id="btn-refresh" href="javascript:;" class="btn btn-default" onclick="window.grid.reload()"><i class="fa fa-refresh"></i> 刷新</a>
                 </div>
                 <div class="col-6 content-right">
@@ -38,7 +38,7 @@
                         <option value="">所在部门</option>
                     </select>
                     <input name="Key" type="search" value="" placeholder="关键字" />
-                    <input type="button" class="btn btn-blue" value="搜索" onclick="window.grid.reload()">
+                    <input type="button" class="btn btn-blue" value="搜索" onclick="window.grid.search()">
                 </div>
             </div>
         </form>

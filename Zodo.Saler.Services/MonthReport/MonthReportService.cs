@@ -13,7 +13,7 @@ namespace Zodo.Saler.Services
         /// </summary>
         private readonly string[] COLUMNS_SALEMANAGE = new string[]
         {
-            "FJ", "HC", "BS", "ZJC", "DSF", "YWZDF", "ZSF", "ZSJYJL", "JTJT", "CFJT", "TXF", "QTFY"
+            "FJ", "HC", "BS", "ZJC", "DSF", "YWZDF", "ZSF", "ZSJYJL", "ZBFY", "CCBT", "TXF", "QTFY"
         };
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Zodo.Saler.Services
             }
 
             string sql = @"
-INSERT INTO Base_MonthReport (SalerId,DeptId,Year,HalfYear,Quarter,Month,FJ,HC,BS,ZJC,DSF,YWZDF,ZSF,ZSJYJL,JTJT,CFJT,TXF,QTFY,XZ,YJ,FWF,ZMML,IsDel,CreateAt,CreateBy,Creator,UpdateAt,UpdateBy,Updator) 
+INSERT INTO Base_MonthReport (SalerId,DeptId,Year,HalfYear,Quarter,Month,FJ,HC,BS,ZJC,DSF,YWZDF,ZSF,ZSJYJL,ZBFY,CCBT,TXF,QTFY,XZ,YJ,FWF,ZMML,IsDel,CreateAt,CreateBy,Creator,UpdateAt,UpdateBy,Updator) 
 SELECT Id,DeptId,@Year,@HalfYear,@Quarter,@Month,0,0,0,0,0,0,0,0,0,0,0,0,Salary,0,0,0,0,GETDATE(),@UserId,@UserName,GETDATE(),@UserId,@UserName
 FROM Base_Saler WHERE Id=@Id And IsDel=0";
 
@@ -196,7 +196,7 @@ FROM Base_Saler WHERE Id=@Id And IsDel=0";
 
             var depts = DeptUtil.All();
             string sql = @"
-INSERT INTO Base_MonthReport (SalerId,DeptId,Year,HalfYear,Quarter,Month,FJ,HC,BS,ZJC,DSF,YWZDF,ZSF,ZSJYJL,JTJT,CFJT,TXF,QTFY,XZ,YJ,FWF,ZMML,IsDel,CreateAt,CreateBy,Creator,UpdateAt,UpdateBy,Updator) 
+INSERT INTO Base_MonthReport (SalerId,DeptId,Year,HalfYear,Quarter,Month,FJ,HC,BS,ZJC,DSF,YWZDF,ZSF,ZSJYJL,ZBFY,CCBT,TXF,QTFY,XZ,YJ,FWF,ZMML,IsDel,CreateAt,CreateBy,Creator,UpdateAt,UpdateBy,Updator) 
 SELECT Id,DeptId,@Year,@HalfYear,@Quarter,@Month,0,0,0,0,0,0,0,0,0,0,0,0,Salary,0,0,0,0,GETDATE(),@UserId,@UserName,GETDATE(),@UserId,@UserName
 FROM Base_Saler WHERE IsDel=0 ORDER BY DeptId,Name";
             var row = db.Execute(sql, new { Year = entity.Year, Month = entity.Month, HalfYear = halfYear, Quarter = quarter, UserId = user.Id, UserName = user.Name });

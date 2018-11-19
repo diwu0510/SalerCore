@@ -14,7 +14,7 @@ namespace HZC.Common.Services
         /// <returns></returns>
         public Result<AppUserEntity> Login(string name, string pw)
         {
-            if (string.IsNullOrWhiteSpace(name.Trim()) || string.IsNullOrWhiteSpace(pw.Trim()))
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(pw))
             {
                 return ResultUtil.Fail<AppUserEntity>(null, "用户名或密码不能为空");
             }
