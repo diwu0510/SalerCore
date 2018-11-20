@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Zodo.Saler.Website.Extensions;
 
 namespace Zodo.Saler.Website
 {
@@ -36,6 +37,8 @@ namespace Zodo.Saler.Website
             services.AddMemoryCache();
 
             services.AddSession();
+
+            //services.AddHttpAccessor();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(opts =>
@@ -65,6 +68,8 @@ namespace Zodo.Saler.Website
             app.UseSession();
 
             app.UseAuthentication();
+
+            //app.UseHttpContextContextUtil();
 
             app.UseMvc(routes =>
             {
